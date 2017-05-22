@@ -1,26 +1,15 @@
-# May 17, 2017
-# Question 2:
-# The files credit_card_data.txt (without headers) and credit_card_data-headers.txt (with headers)
-# contain a dataset with 654 data points, 6 continuous and 4 binary predictor variables. It has
-# anonymized credit card applications with a binary response variable (last column) indicating if the
-# application was positive or negative. The dataset is the “Credit Approval Data Set” from the UCI Machine
-# Learning Repository (https://archive.ics.uci.edu/ml/datasets/Credit+Approval) without the categorial
-# variables and without data points that have missing values.
-# 1. Using the support vector machine function ksvm contained in the R package kernlab, find a
-# good classifier for this data. Show the equation of your classifier, and how well it classifies the
-# data points in the full data set. (Don’t worry about test/validation data yet; we’ll cover that
-#                                    topic soon.)
-# Notes on ksvm
-# • You can use scaled=TRUE to get ksvm to scale the data as part of calculating a
-# classifier.
-# • The term λ we used in the SVM lesson to trade off the two components of correctness
-# and margin is called C in ksvm. One of the challenges of this homework is to find a
-# value of C that works well; for many values of C, almost all predictions will be “yes” or
-# almost all predictions will be “no”.
-# • ksvm does not directly return the coefficients a0 and a1…am. Instead, you need to do
-# the last step of the calculation yourself. Here’s an example of the steps to take
-# (assuming your data is stored in a matrix called data):
+---
+title: "Gambrel 6501x HW 1"
+output:
+  pdf_document: default
+  html_document: default
+---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r wd}
 rm(list = ls())
 
 if (Sys.info()[[1]] == "Windows") {
@@ -28,7 +17,19 @@ if (Sys.info()[[1]] == "Windows") {
 } 
 
 pacman::p_load(dplyr, tidyr, magrittr, kernlab, kknn, readr, purrr)
+``` 
+# Q1
 
+My company makes practice management software for physician groups. Frequently, they want to know the expected amount of patient no-shows so that they can efficiently schedule patients' and providers' time. To predict whether a scheduled patient shows up as scheduled, we might use:
+
+1. Prior patient visits (have they no-showed in the past?)
+2. Patient access to transportation (do they own a vehicle or rely on public transportation / rides from others)
+3. How long ago was the appointment made
+4. Is this a regular checkup or a sick visit
+5. Time of schedule appointment
+
+# Q2.1 {#q21}
+```{r echo = T, results = 'hide', message = F}
 cc <- read_tsv("credit_card_data-headers.txt")
 
 cc_matrix <- cc %>% as.matrix()
@@ -60,7 +61,19 @@ cross2(
   c("vanilladot", "splinedot", "rbfdot", "anovadot")
 ) %>%
     map(lift(sv))
+```
+```{r}
+print(best_combo)
+```
+I tested several kernels and C-values and found that a spline kernel with C = 10 was the best predictor of the data. The equation was:
 
+$y = -852694 + 0.271*A1 + 549.21*A2 - 51.655*A3 - 9.52*A8 - 0.667*A9 + 3.153*A10 - 10.414*A11 + 5.738*A12 - 4305.13*A14 + 5911.14*A15$
+
+This classified 97.86% of the responses correctly.
+
+# Q2.2
+I trained a series of KNN models by splitting the data into a training and testing set.
+```{r}
 # testing K choices
 for (k_choice in 2:10){
 
@@ -70,7 +83,11 @@ for (k_choice in 2:10){
   correct = sum(pred == cc[500:654, 11]) / 155
   print(paste0("k = ", k_choice, ": ", correct))
 }
+```
+From these results, I would choose K = 5 as the best parameter choice. It had good fit with minimal marginal improvement from adding additional clusters. This combination correctly classified 83.87% of the observations.
 
+# Q3.a
+```{r}
 
 trained <- train.kknn(R1 ~ ., cc, kmax = 20,
                       kernel = c("rectangular", "triangular", "epanechnikov",
@@ -78,18 +95,13 @@ trained <- train.kknn(R1 ~ ., cc, kmax = 20,
                       distance = 2)
 trained$best.parameters
 plot(trained)
-# looks like gaussian, k = 6 is best compromise
+```
 
-pred <- vector("integer", nrow(cc))
+The `kknn` package's cross-validation optimizer selected a gaussian kernel with 20 clusters as the clustering method that minimized squared errors. However, since adding extra clusters might cause overfitting, it is worth checking the marginal improvement of these higher K values. Viewing the error plot, it appears that a model with K = 6 and a gaussian kernel will have almost identical classification performance.
 
-for (i in 1:nrow(cc)) {
-  knn <- kknn(R1~., cc[-i, ], cc[i, ], k = 6, scale = T, kernel = 'gaussian')
-  pred[i] <- round(fitted(knn))
-}
-correct = sum(pred == cc[, 11]) / nrow(cc_matrix)
-print(paste0("k = ", k_choice, ": ", correct))
-
-
+#Q3.b
+I split my data into 3 parts: a 60% training set, a 20% validation set, and a 20% test set, in order to accurately estimate out-of-sample performance. I then re-run my support vector checks of C and kernel choices.
+```{r results = 'hide'}
 index <- 1:654
 train <- sample(index, size = round(654*.6)) %>% sort()
 val <- sample(index[-train], size = round(654 * .2)) %>% sort()
@@ -117,24 +129,30 @@ sv_val <- function(c_val, kern) {
   }
 }
 
+
 cross2(
   c(.0001, .001, 0.01, 0.1, 1, 10, 100),
   c("vanilladot", "rbfdot", "anovadot")
 ) %>%
   map(lift(safely(sv_val)))
+```
+```{r}
+print(best_combo)
+print(best_params)
+```
 
-# best params were C = 10, anovadot
-
+The best combination this time around was a C value of 1 using the ANOVA RBF kernel. In order to estimate the model's accuracy, I apply these results to the testing data:
+```{r}
 knn <- kknn(R1~., cc[train, ], cc[val, ], k = 6, scale = T)
 pred <- round(fitted(knn))
 
 model <- ksvm(x = cc_matrix[train, 1:10], y = as.factor(cc_matrix[train, 11]), type = "C-svc",
-              kernel = 'anovadot', C = 10, scaled = T)
+              kernel = 'anovadot', C = 1, scaled = T)
 
 a <- colSums(cc_matrix[model@SVindex, 1:10] * model@coef[[1]])
 a0 <- sum(a * cc_matrix[1, 1:10]) - model@b
 pred <- predict(model, cc_matrix[test, 1:10])
 correct = sum(pred == cc_matrix[test , 11]) / nrow(cc_matrix[test, ])
 print(correct)
-
-
+```
+This estimate of performance is much lower than what was found in [Question 2.1](#q21). This is to be expected - the earlier model used the full dataset without accounting for sample error. This newer result is much closer to what we would expect the model to achieve with new data.

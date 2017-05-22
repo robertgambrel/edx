@@ -1,0 +1,16 @@
+Q1.
+
+My company makes practice management software for physician groups. Frequently, they want to know the expected amount of patient no-shows so that they can efficiently schedule patients' and providers' time. To predict whether a scheduled patient shows up as scheduled, we might use:
+1. Prior patient visits (have they no-showed in the past?)
+2. Patient access to transportation (do they own a vehicle or rely on public transportation / rides from others)
+3. How long ago was the appointment made
+4. Is this a regular checkup or a sick visit
+5. Time of schedule appointment
+
+Q2.1
+I tested several kernels and C-values and found that a spline kernel with C = 10 was the best predictor of the data. The equation was:
+y = -852694 + 0.271*A1 + 549.21*A2 - 51.655*A3 - 9.52*A8 - 0.667*A9 + 3.153*A10 - 10.414*A11 + 5.738*A12 - 4305.13*A14 + 5911.14*A15
+This classified 97.86% of the responses correctly.
+
+Q2.2
+I tested several K values and kernels and found that the default kernel with K = 5 was the best parameter choice that had good fit with minimal marginal improvement from adding additional clusters. This combination correctly classified 85.16% of the observations.
