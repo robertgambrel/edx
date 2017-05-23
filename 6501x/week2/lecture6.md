@@ -11,3 +11,11 @@
 - Cumulative Sum
     - Has the mean of a distribution changed?
 - `X_t` is periodic observation, with over-time mean `mu`
+- `S_t` = `max{0, S_(t-1) + (x_t - mu - C)}
+    - is S_t >= T, the threshhold amount?
+    - S_t can never drop below 0 - don't want all the random downward fluctuations cancelling up the later upward trends
+    - `mu` is average among all observations
+    - Use the C dampener to make it less sensitive - takes more consistent upswing to observe a change
+    - Set C and T to tune the model
+        - Choose values based on cost - is it more costly to take too long to observe a change, or to raise too many false positives?
+    - 
