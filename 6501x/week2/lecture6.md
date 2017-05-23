@@ -10,4 +10,4 @@
 # CUSUM
 - Cumulative Sum
     - Has the mean of a distribution changed?
-- $X_t$ is periodic observation, with over-time mean $mu$
+- `X_t` is periodic observation, with over-time mean `mu`
