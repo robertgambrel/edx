@@ -1,0 +1,84 @@
+---
+title: "Gambrel 6501x HW 2"
+author: "Robert Gambrel"
+date: "May 23, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r wd}
+rm(list = ls())
+
+if (Sys.info()[[1]] == "Windows") {
+  setwd("E:/GoogleDrive/edx/6501x/week2")
+} 
+
+pacman::p_load(dplyr, tidyr, magrittr, kernlab, kknn, readr, purrr, stats, outliers)
+set.seed(42)
+``` 
+# Q1
+
+Political scientists frequently ask respondents a range of questions to gauge respondents' attitudes towards social, economic, and security issues. These questions can then be used to categorize individuals into political clusters (libertarian, populist, progressive, conservative, etc.) that are more fine-grained than simple party affiliation. Predictors useful in categorizing voters could include:
+1. Support for government sponsored universal health insurance
+2. Support for flat vs. progressive tax systems
+3. Attitudes towards social issues and government's role in proscribing behaviors
+4. Attitudes towards the criminal justice system (role of police, drug reform, prison sentencing guidelines)
+
+# Q2
+
+```{r}
+data(iris)
+n_distinct(iris$Species)
+iris$Species %>% unique()
+
+kplot <- function(i) {
+  means <- kmeans(iris[, 1:4], centers = i, nstart = 50)
+  plot(iris[, 1:4], col = means$cluster)
+  }
+  
+walk(1:5, kplot)
+```
+Reviewing the output, it appears that a three cluster approach is the best approach. It does a reasonable job separating the data without adding excessive sub-clusters that border each other too much.
+
+```{r}
+means <- kmeans(iris[, 1:4], centers = 3, nstart = 50)
+
+print(means$centers)
+```
+After applying a k=3 model, I find that all 4 predictor variables contribute to clustering. The centers of each of the 3 clusters are displayed above.
+
+```{r}
+fitted.means <- fitted(means, method = "classes")
+
+fitted_df <- as.data.frame(fitted.means)
+fitted_df$class <- NA_character_
+fitted_df <- fitted_df %>%
+    mutate(
+        class = ifelse(fitted.means == 3, 'setosa', 
+                          ifelse(fitted.means == 2, 'virginica', 'versicolor')))
+                          
+sum(fitted_df$class == iris$Species) / nrow(fitted_df)
+```
+Comparing predicted clusters versus actual flower type yields a predictive accuracy of 89.33%.
+
+# Q3
+```{r}
+crime <- read_tsv("http://www.statsci.org/data/general/uscrime.txt")
+
+summary(crime$Crime)
+
+crime %>%
+  filter(Crime >= quantile(Crime, .95))
+
+crime %>%
+  filter(Crime <= quantile(Crime, .05))
+
+outliers::grubbs.test(crime$Crime, 10)
+outliers::grubbs.test(crime$Crime, 10, opposite = T)
+outliers::grubbs.test(crime$Crime, 11)
+```
+
+The highest Crime ratio is 1993, but the second highest is 1969. The top value is therefore not more extreme than the next. Similarly for the lowest value (342), the second lowest is 373. Given the small sample size, these do not appear to be abnormally far from the median. The Grubbs test supports this conclusion - no outlier test reaches statistical significance.
