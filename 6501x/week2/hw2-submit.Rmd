@@ -82,3 +82,65 @@ outliers::grubbs.test(crime$Crime, 11)
 ```
 
 The highest Crime ratio is 1993, but the second highest is 1969. The top value is therefore not more extreme than the next. Similarly for the lowest value (342), the second lowest is 373. Given the small sample size, these do not appear to be abnormally far from the median. The Grubbs test supports this conclusion - no outlier test reaches statistical significance.
+
+
+# Q4
+
+# Q5
+I first downloaded the data, cleaned it, and saved it as a csv file.
+```{r}
+# Question 5
+
+temps <- read_csv('temps.csv')
+
+temps <- temps %>%
+	arrange(Year, Month, Day) %>%
+	mutate(
+		date = ymd(paste0(Year, '-', Month, '-', Day))
+		) %>%
+	group_by(Year) %>%
+	mutate(
+		rn = 1:n()
+	)
+
+
+ggplot(data = temps) +
+	geom_line(aes(x = rn, y = high_temp, col = as.factor(Year), group = Year)) +
+	geom_smooth(aes(x = rn, y = high_temp), method = 'loess') +
+	scale_color_discrete(name = "Year")
+```
+Looking at the data, there is clearly a downward trend starting towards the end of summer. To calculate a CUSUM approach, I recreate the model shown in the lecture:
+
+```{r}
+daily_means <- temps %>%
+  group_by(Month, Day) %>%
+  summarize(
+    mean_temp = mean(high_temp, na.rm = T)
+  ) %>%
+  ungroup()
+  
+mu <- mean(daily_means$mean_temp, na.rm = T)
+T = 10
+C = 2
+
+cusum_data <- daily_means %>%
+  arrange(Month, Day) %>%
+  mutate(
+    mu_minus_temp = mu - mean_temp,
+    mu_minus_temp_minus_c = mu - mean_temp - C,
+    S = 0
+  )  %>%
+  mutate(
+    S = max(0, lag(S) + mu_minus_temp_minus_c)
+  )
+  
+first_occur <- cusum_data %>% 
+  # only days above the threshold
+  filter(
+    S >= T
+  ) %>%
+  # keep earliest observation
+  slice(1)
+  
+print(paste0('T = ', T, '; C = ', C, '; Date = ', first_occur[["Month"]], ', ', first_occur[['Day']]))
+```
