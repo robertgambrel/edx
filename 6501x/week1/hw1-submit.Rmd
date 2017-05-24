@@ -17,6 +17,7 @@ if (Sys.info()[[1]] == "Windows") {
 } 
 
 pacman::p_load(dplyr, tidyr, magrittr, kernlab, kknn, readr, purrr)
+set.seed(42)
 ``` 
 # Q1
 
@@ -141,7 +142,7 @@ print(best_combo)
 print(best_params)
 ```
 
-The best combination this time around was a C value of 1 using the ANOVA RBF kernel. In order to estimate the model's accuracy, I apply these results to the testing data:
+The best combination this time around was a C value of 0.001 using a linear kernel. In order to estimate the model's accuracy, I apply these results to the testing data:
 ```{r}
 knn <- kknn(R1~., cc[train, ], cc[val, ], k = 6, scale = T)
 pred <- round(fitted(knn))
