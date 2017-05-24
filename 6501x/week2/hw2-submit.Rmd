@@ -112,35 +112,40 @@ ggplot(data = temps) +
 Looking at the data, there is clearly a downward trend starting towards the end of summer. To calculate a CUSUM approach, I recreate the model shown in the lecture:
 
 ```{r}
-daily_means <- temps %>%
-  group_by(Month, Day) %>%
-  summarize(
-    mean_temp = mean(high_temp, na.rm = T)
-  ) %>%
-  ungroup()
   
-mu <- mean(daily_means$mean_temp, na.rm = T)
 T = 10
 C = 2
 
-cusum_data <- daily_means %>%
-  arrange(Month, Day) %>%
+cusum_data <- temps %>%
+  # mu by year
+  group_by(Year) %>%
+    mutate(
+    mu = mean(high_temp, na.rm = T)
+    ) %>%
+  ungroup() %>%
+  # CUSUM Model
+  arrange(Year, Month, Day) %>%
   mutate(
     mu_minus_temp = mu - mean_temp,
     mu_minus_temp_minus_c = mu - mean_temp - C,
     S = 0
   )  %>%
+  # group by year so no cross-year lags being checked
+  group_by(Year) %>%
   mutate(
     S = max(0, lag(S) + mu_minus_temp_minus_c)
-  )
+  ) %>%
+  ungroup()
   
 first_occur <- cusum_data %>% 
   # only days above the threshold
   filter(
     S >= T
   ) %>%
-  # keep earliest observation
+  # keep earliest observation per year
+  group_by(Year) %>%
   slice(1)
   
-print(paste0('T = ', T, '; C = ', C, '; Date = ', first_occur[["Month"]], ', ', first_occur[['Day']]))
+print(paste0('T = ', T, '; C = ', C))
+print(first_occur)
 ```
