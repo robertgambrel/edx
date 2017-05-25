@@ -89,6 +89,12 @@ The highest Crime ratio is 1993, but the second highest is 1969. The top value i
 
 # Q4
 
+A CUSUM model might be useful in determining at what point in the day traffic has transitioned from normal flow to rush-hour backups. By knowing both regular rush-hour times as well as identifying days that typically start earlier or later, emergency responders can make necessary continency plans about travel times.
+
+Such a model could use location data recorded by navigation devices and apps to determine mean travel times between select business districts and suburban areas. As commuters began their daily travel, the new travel times could be compared against the mean to determine whether travel had significantly slowed.
+
+Determining the threshold value will be more important than the C damper. While some drivers might successfully weave across lanes to increase average speed, the overall 'flow of traffic' should be relatively consistent across cars experiencing the same backup. Therefore the C value could be relatively small - perhaps only a few minutes, to account for random error. The T threshold value would be more difficult, as inconvenience due to rush hour delays are subjective. I would probably shoot for something like a 50% increase in travel time as my rush hour threshold. So, if the usual commute is 40 minutes, but travel times are currently at one hour, I would want the model to classify current conditions as rush hour traffic.
+
 # Q5
 I first downloaded the data, cleaned it, and saved it as a csv file.
 ```{r}
