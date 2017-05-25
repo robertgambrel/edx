@@ -14,9 +14,12 @@ rm(list = ls())
 
 if (Sys.info()[[1]] == "Windows") {
   setwd("E:/GoogleDrive/edx/6501x/week2")
-} 
+} else if (Sys.info()[[1]] == "Darwin") {
+  setwd("/Users/healthpolicyanalyst/Documents/Box Sync/Personal/edx/6501x/week2")
 
-pacman::p_load(dplyr, tidyr, magrittr, kernlab, kknn, readr, purrr, stats, outliers)
+}
+
+pacman::p_load(dplyr, tidyr, magrittr, readr, purrr, stats, outliers, lubridate, ggplot2)
 set.seed(42)
 ``` 
 # Q1
@@ -107,6 +110,7 @@ temps <- temps %>%
 ggplot(data = temps) +
 	geom_line(aes(x = rn, y = high_temp, col = as.factor(Year), group = Year)) +
 	geom_smooth(aes(x = rn, y = high_temp), method = 'loess') +
+  geom_hline(aes(yintercept = mean(temps$high_temp, na.rm = T))) +
 	scale_color_discrete(name = "Year")
 ```
 Looking at the data, there is clearly a downward trend starting towards the end of summer. To calculate a CUSUM approach, I recreate the model shown in the lecture:
@@ -114,7 +118,7 @@ Looking at the data, there is clearly a downward trend starting towards the end 
 ```{r}
   
 T = 10
-C = 2
+C = 0
 
 cusum_data <- temps %>%
   # mu by year
@@ -126,14 +130,17 @@ cusum_data <- temps %>%
   # CUSUM Model
   arrange(Year, Month, Day) %>%
   mutate(
-    mu_minus_temp = mu - mean_temp,
-    mu_minus_temp_minus_c = mu - mean_temp - C,
+    mu_minus_temp = mu - high_temp,
+    mu_minus_temp_minus_c = mu - high_temp - C,
     S = 0
   )  %>%
   # group by year so no cross-year lags being checked
   group_by(Year) %>%
   mutate(
-    S = max(0, lag(S) + mu_minus_temp_minus_c)
+    S_old = ifelse(lag(S) + mu_minus_temp_minus_c > 0 & !is.na(lag(S)),
+                   lag(S) + mu_minus_temp_minus_c, 0),
+    S = S_old,
+    tester = lag(high_temp)
   ) %>%
   ungroup()
   
@@ -147,5 +154,5 @@ first_occur <- cusum_data %>%
   slice(1)
   
 print(paste0('T = ', T, '; C = ', C))
-print(first_occur)
+first_occur[, c('Year', 'Month', 'Day', 'S')]
 ```
