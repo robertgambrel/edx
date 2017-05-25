@@ -120,22 +120,23 @@ Looking at the data, there is clearly a downward trend starting towards the end 
 T = 10
 C = 0
 
-cusum_data <- temps %>%
+cusum <- function(T, C) {
+cusum_data <- temps_long %>%
   # mu by year
-  group_by(Year) %>%
+  group_by(year) %>%
     mutate(
     mu = mean(high_temp, na.rm = T)
     ) %>%
   ungroup() %>%
   # CUSUM Model
-  arrange(Year, Month, Day) %>%
+  arrange(year, rn) %>%
   mutate(
     mu_minus_temp = mu - high_temp,
     mu_minus_temp_minus_c = mu - high_temp - C,
     S = 0
   )  %>%
   # group by year so no cross-year lags being checked
-  group_by(Year) %>%
+  group_by(year) %>%
   mutate(
     S_old = ifelse(lag(S) + mu_minus_temp_minus_c > 0 & !is.na(lag(S)),
                    lag(S) + mu_minus_temp_minus_c, 0),
@@ -150,9 +151,21 @@ first_occur <- cusum_data %>%
     S >= T
   ) %>%
   # keep earliest observation per year
-  group_by(Year) %>%
+  group_by(year) %>%
   slice(1)
   
-print(paste0('T = ', T, '; C = ', C))
-first_occur[, c('Year', 'Month', 'Day', 'S')]
+print(paste0('T = ', T, '; C = ', C, '; Mean Day = ', round(mean(first_occur$rn), 3),'; s.d. Day = ', 
+	round(sd(first_occur$rn), 3)))
+#first_occur[, c('Year', 'Month', 'Day', 'S')]
+}
+mean(first_occur$rn)
+sd(first_occur$rn)
+T_list <- c(5, 10, 15, 20)
+C_list <- c(0, 3, 6, 9, 12)
+
+cross2(T_list, C_list) %>%
+	walk(lift(cusum))
+
+cross2(c(5), 0:20) %>%
+	walk(lift(cusum))
 ```
