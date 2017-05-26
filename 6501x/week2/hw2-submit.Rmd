@@ -100,23 +100,22 @@ I first downloaded the data, cleaned it, and saved it as a csv file.
 ```{r}
 # Question 5
 
-temps <- read_csv('temps.csv')
+temps <- read_tsv('temps.txt')
 
-temps <- temps %>%
-	arrange(Year, Month, Day) %>%
-	mutate(
-		date = ymd(paste0(Year, '-', Month, '-', Day))
-		) %>%
-	group_by(Year) %>%
+temps_long <- temps %>%
+  gather(year, high_temp, 2:ncol(temps))
+
+temps_long %<>%
+	group_by(year) %>%
 	mutate(
 		rn = 1:n()
 	)
 
 
-ggplot(data = temps) +
-	geom_line(aes(x = rn, y = high_temp, col = as.factor(Year), group = Year)) +
+ggplot(data = temps_long) +
+	geom_line(aes(x = rn, y = high_temp, col = as.factor(year), group = year)) +
 	geom_smooth(aes(x = rn, y = high_temp), method = 'loess') +
-  geom_hline(aes(yintercept = mean(temps$high_temp, na.rm = T))) +
+  geom_hline(aes(yintercept = mean(temps_long$high_temp, na.rm = T))) +
 	scale_color_discrete(name = "Year")
 ```
 Looking at the data, there is clearly a downward trend starting towards the end of summer. To calculate a CUSUM approach, I recreate the model shown in the lecture:
@@ -164,8 +163,7 @@ print(paste0('T = ', T, '; C = ', C, '; Mean Day = ', round(mean(first_occur$rn)
 	round(sd(first_occur$rn), 3)))
 #first_occur[, c('Year', 'Month', 'Day', 'S')]
 }
-mean(first_occur$rn)
-sd(first_occur$rn)
+
 T_list <- c(5, 10, 15, 20)
 C_list <- c(0, 3, 6, 9, 12)
 
