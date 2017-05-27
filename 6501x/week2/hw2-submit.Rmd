@@ -44,7 +44,7 @@ kplot <- function(i) {
   
 walk(1:5, kplot)
 ```
-Reviewing the output, it appears that a three cluster approach is the best approach. It does a reasonable job separating the data without adding excessive sub-clusters that border each other too much.
+Reviewing the output, it appears that a three cluster approach is the best approach. It does a reasonable job separating the data without adding excessive sub-clusters that border each other too much. The red group is consistently in its own cluster, and the green and black groups are contiguous but pretty consistently non-overlapping.
 
 ```{r}
 means <- kmeans(iris[, 1:4], centers = 3, nstart = 50)
@@ -103,7 +103,8 @@ I first downloaded the data, cleaned it, and saved it as a csv file.
 temps <- read_tsv('temps.txt')
 
 temps_long <- temps %>%
-  gather(year, high_temp, 2:ncol(temps))
+  gather(year, high_temp, 2:ncol(temps)) %>%
+  mutate(year = as.numeric(year))
 
 temps_long %<>%
 	group_by(year) %>%
@@ -117,50 +118,58 @@ ggplot(data = temps_long) +
 	geom_smooth(aes(x = rn, y = high_temp), method = 'loess') +
   geom_hline(aes(yintercept = mean(temps_long$high_temp, na.rm = T))) +
 	scale_color_discrete(name = "Year")
+
+mean(temps_long[temps_long$rn <= 30,]$high_temp, na.rm = T)
+mean(temps_long[temps_long$rn >= 90,]$high_temp, na.rm = T)
+
 ```
-Looking at the data, there is clearly a downward trend starting towards the end of summer. To calculate a CUSUM approach, I recreate the model shown in the lecture:
+Looking at the data, there is clearly a downward trend starting around day 75, or the middle of August. Mean temperature in July is 88.8 degrees, while in October it is 73.7 degrees. To calculate a CUSUM approach, I recreate the model shown in the lecture:
 
 ```{r}
   
-T = 10
-C = 0
 
-cusum <- function(T, C) {
-cusum_data <- temps_long %>%
-  # mu by year
-  group_by(year) %>%
+cusum <- function(T, C, print_result = F) {
+  cusum_data <- temps_long %>%
+    # mu by year
+    group_by(year) %>%
+      mutate(
+      mu = mean(high_temp, na.rm = T)
+      ) %>%
+    ungroup() %>%
+    # CUSUM Model
+    arrange(year, rn) %>%
     mutate(
-    mu = mean(high_temp, na.rm = T)
+      mu_minus_temp = mu - high_temp,
+      mu_minus_temp_minus_c = mu - high_temp - C,
+      S = 0
+    )  %>%
+    # group by year so no cross-year lags being checked
+    group_by(year) %>%
+    mutate(
+      S_old = ifelse(lag(S) + mu_minus_temp_minus_c > 0 & !is.na(lag(S)),
+                     lag(S) + mu_minus_temp_minus_c, 0),
+      S = S_old,
+      tester = lag(high_temp)
     ) %>%
-  ungroup() %>%
-  # CUSUM Model
-  arrange(year, rn) %>%
-  mutate(
-    mu_minus_temp = mu - high_temp,
-    mu_minus_temp_minus_c = mu - high_temp - C,
-    S = 0
-  )  %>%
-  # group by year so no cross-year lags being checked
-  group_by(year) %>%
-  mutate(
-    S_old = ifelse(lag(S) + mu_minus_temp_minus_c > 0 & !is.na(lag(S)),
-                   lag(S) + mu_minus_temp_minus_c, 0),
-    S = S_old,
-    tester = lag(high_temp)
-  ) %>%
-  ungroup()
+    ungroup()
+    
+  first_occur <- cusum_data %>% 
+    # only days above the threshold
+    filter(
+      S >= T
+    ) %>%
+    # keep earliest observation per year
+    group_by(year) %>%
+    slice(1) %>%
+    ungroup()
+    
+  print(paste0('T = ', T, '; C = ', C, '; Mean Day = ', round(mean(first_occur$rn), 3),'; s.d. Day = ', 
+  	round(sd(first_occur$rn), 3)))
   
-first_occur <- cusum_data %>% 
-  # only days above the threshold
-  filter(
-    S >= T
-  ) %>%
-  # keep earliest observation per year
-  group_by(year) %>%
-  slice(1)
-  
-print(paste0('T = ', T, '; C = ', C, '; Mean Day = ', round(mean(first_occur$rn), 3),'; s.d. Day = ', 
-	round(sd(first_occur$rn), 3)))
+  if(print_result) {
+    print(first_occur)
+    return(first_occur)
+  }
 #first_occur[, c('Year', 'Month', 'Day', 'S')]
 }
 
@@ -170,6 +179,62 @@ C_list <- c(0, 3, 6, 9, 12)
 cross2(T_list, C_list) %>%
 	walk(lift(cusum))
 
-cross2(c(5), 0:20) %>%
+```
+While T = 15, C = 9 seems to have the most consistent results across the model, 15 degrees seems an excessive threshold to require temperatures to drop. I will therefore focus more on a threshold of 10:
+
+```{r}
+cross2(10, 0:20) %>%
 	walk(lift(cusum))
 ```
+By adding a higher dampener, the results become tighter around the chosen day the threshold is met. However, this loses sensitivity. Out of these, I would choose T = 10, C = 9. It represents a substantial decrease in s.d. of the threshold day across years when compared with lower C values and provides a reasonable estimate of when summer heat ends - early October. 
+
+# 5.2
+```{r}
+threshold_dates <- cusum(10, 9, print_result = T)
+ggplot(data = threshold_dates) +
+  geom_line(aes(x = year, y = mu))
+```
+It appears that mean temperatures may be on a slight upward trend, but there is so much year-to-year fluctuation that it is hard to know for certain. 
+```{r}
+cusum_yearly <- function(T, C, print_result = F) {
+  cusum_data <- threshold_dates %>%
+    select(year, mu) %>%
+    mutate(
+      global_mu = mean(mu)
+    ) %>%
+    arrange(year) %>%
+    mutate(
+      temp_minus_mu = mu - global_mu,
+      temp_minus_mu_minus_C = mu - global_mu - C,
+      S = 0
+    )  %>%
+    mutate(
+      S_old = ifelse(lag(S) + temp_minus_mu_minus_C > 0 & !is.na(lag(S)),
+                     lag(S) + temp_minus_mu_minus_C, 0),
+      S = S_old
+      ) %>%
+    ungroup()
+    
+  first_occur <- cusum_data %>% 
+    # only days above the threshold
+    filter(
+      S >= T
+    ) %>%
+    slice(1)
+    
+  print(paste0('T = ', T, '; C = ', C, '; Threshold Year Met = ', round(first_occur$year)))
+  
+  if(print_result) {
+    print(first_occur)
+    return(first_occur)
+  }
+#first_occur[, c('Year', 'Month', 'Day', 'S')]
+}
+
+T_list <- c(1, 2, 3, 4)
+C_list <- c(1, 2, 3, 4)
+
+cross2(T_list, C_list) %>%
+	walk(lift(cusum_yearly))
+```
+The results would lead me to conclude that temperatures have not increased in our observation period. A few successful reaches of the threshold are achieved, but these are only at low T values with small C values as well. For the majority of the models, the threshold is not met. Since each model has a random chance of falsely exceeding a threshold earlier than its true value would suggest, I would not say the temperatures have increased overall.
