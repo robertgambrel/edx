@@ -39,5 +39,48 @@
 
 
 # Forecasting
-- 
+- Can do simple forecasting with exponential smoothing
+- To predict, best estimate of x_(t+t) is S_t, so your forecast is constant
+- If you add a trend, then best estimate of next baseline is current baseline, similar for trend
+  - F_(t+1) = S_t + T_t
+- For multiplicative seasonality:
+  - Best estimate of C_(t+1) is the latest estimate for that same cycle: C_(t - L + 1)
+  - F_(t+1) = (S_t + T_t) * C_(t - L + 1)
+ 
+# How to find best values of alpha, beta, gamma?
+- Optimize to minimize (F_t - x_t)^2
+- Time series methods
+  
+# ARIMA
+- 3 key parts:
+  - Differences
+    - The baseline exponential smoothing function works best with stationary data
+    - If data isn't stationary, the differences might be
+    - Might need D differences
+  - Autoregression
+    - Predicting current values based on prior values
+    - Smoothing equation is AR - uses all prior values
+    - But could also use only a few models (p-periods)
+  - Moving Average
+    - Previous errors as predictors (order q)
+  - Software can optimize p, d, q
+- Can also add seasonality
+  - ARIMA(0,0,0) is white noise
+  - ARIMA(0, 1, 0) is random walk
+  - ARIMA(p, 0, 0) is AR model
+  - ARIMA(0, 0, q) is MA model
+  - ARIMA(0, 1, 1) is basic exponential smoothing model
+- Better for forecasting than exponential smoothing when data is more stable
+  - Need at least 40+ obs
+- How to forecase variance of future obs?
+
+# GARCH
+- Generalized Autoregressive Conditional Heteroskedasticity
+- Estimate or forecast the variance
+  - Estimated amount of error
+- Similar format to ARIMA equation
+  - Except deals only with variances / squared errors, not actual observation
+  - Only addresses raw variances, not differences
+  
+
 
