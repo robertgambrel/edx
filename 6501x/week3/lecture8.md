@@ -35,7 +35,18 @@
     - 0 < |BIC_1 - BIC_2| < 2: smaller-BIG model 'slightly likely' better
  
 # Using Regression
-- 
+- To determine importance of different factors in predicting outcomes
+- To predict Y values for new data
+
+# Causation vs Correlation
+- Hard to rule out all external mutual causes
+
+# Data transformations
+- Adjust the data to make the fit linear - quadratic, sinusoidal, logarithms
+- Box-Cox transformations can be automated
+- Variable interactions
+
+
     
   
   
