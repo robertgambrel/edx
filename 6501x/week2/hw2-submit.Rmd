@@ -142,16 +142,13 @@ cusum <- function(T, C, print_result = F) {
       mu_minus_temp = mu - high_temp,
       mu_minus_temp_minus_c = mu - high_temp - C,
       S = 0
-    )  %>%
-    # group by year so no cross-year lags being checked
-    group_by(year) %>%
-    mutate(
-      S_old = ifelse(lag(S) + mu_minus_temp_minus_c > 0 & !is.na(lag(S)),
-                     lag(S) + mu_minus_temp_minus_c, 0),
-      S = S_old,
-      tester = lag(high_temp)
-    ) %>%
-    ungroup()
+    )  
+    
+    for (i in 2:nrow(cusum_data)) {
+	cusum_data$S[i] = ifelse(cusum_data$S[i-1] + cusum_data$mu_minus_temp_minus_c[i] > 0
+				 & cusum_data$year[i] == cusum_data$year[i-1],
+				 cusum_data$S[i-1] + cusum_data$mu_minus_temp_minus_c[i], 0)
+    }
     
   first_occur <- cusum_data %>% 
     # only days above the threshold
