@@ -123,7 +123,7 @@ mean(temps_long[temps_long$rn <= 30,]$high_temp, na.rm = T)
 mean(temps_long[temps_long$rn >= 90,]$high_temp, na.rm = T)
 
 ```
-Looking at the data, there is clearly a downward trend starting around day 75, or the middle of August. Mean temperature in July is 88.8 degrees, while in October it is 73.7 degrees. To calculate a CUSUM approach, I recreate the model shown in the lecture:
+Looking at the data, there is clearly a downward trend starting around day 75, or the middle of August. Mean temperature in July is 88.8 degrees, while in October it is 73.7 degrees. To calculate a CUSUM approach, I recreate the model shown in the lecture. I calculate mu independently for each year.
 
 ```{r}
   
