@@ -170,7 +170,7 @@ cusum <- function(T, C, print_result = F) {
 #first_occur[, c('Year', 'Month', 'Day', 'S')]
 }
 
-T_list <- c(5, 10, 15, 20)
+T_list <- c(50, 75, 100, 125)
 C_list <- c(0, 3, 6, 9, 12)
 
 cross2(T_list, C_list) %>%
