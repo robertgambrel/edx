@@ -96,10 +96,7 @@ Such a model could use location data recorded by navigation devices and apps to 
 Determining the threshold value will be more important than the C damper. While some drivers might successfully weave across lanes to increase average speed, the overall 'flow of traffic' should be relatively consistent across cars experiencing the same backup. Therefore the C value could be relatively small - perhaps only a few minutes, to account for random error. The T threshold value would be more difficult, as inconvenience due to rush hour delays are subjective. I would probably shoot for something like a 50% increase in travel time as my rush hour threshold. So, if the usual commute is 40 minutes, but travel times are currently at one hour, I would want the model to classify current conditions as rush hour traffic.
 
 # Q5
-I first downloaded the data, cleaned it, and saved it as a csv file.
 ```{r}
-# Question 5
-
 temps <- read_tsv('temps.txt')
 
 temps_long <- temps %>%
@@ -171,23 +168,18 @@ cusum <- function(T, C, print_result = F) {
 }
 
 T_list <- c(50, 75, 100, 125)
-C_list <- c(0, 3, 6, 9, 12)
+C_list <- c(0, 2, 4, 6, 8, 10)
 
 cross2(T_list, C_list) %>%
 	walk(lift(cusum))
 
 ```
-While T = 15, C = 9 seems to have the most consistent results across the model, 15 degrees seems an excessive threshold to require temperatures to drop. I will therefore focus more on a threshold of 10:
+In general, it appears that the day the threshold is met is around day 95-110, which looks reasonable from the graph. I would prefer a somewhat more conservative measure, so I would choose T = 125, C = 2.
 
-```{r}
-cross2(10, 0:20) %>%
-	walk(lift(cusum))
-```
-By adding a higher dampener, the results become tighter around the chosen day the threshold is met. However, this loses sensitivity. Out of these, I would choose T = 10, C = 9. It represents a substantial decrease in s.d. of the threshold day across years when compared with lower C values and provides a reasonable estimate of when summer heat ends - early October. 
 
 # 5.2
 ```{r}
-threshold_dates <- cusum(10, 9, print_result = T)
+threshold_dates <- cusum(125, 2, print_result = T)
 ggplot(data = threshold_dates) +
   geom_line(aes(x = year, y = mu))
 ```
@@ -204,13 +196,14 @@ cusum_yearly <- function(T, C, print_result = F) {
       temp_minus_mu = mu - global_mu,
       temp_minus_mu_minus_C = mu - global_mu - C,
       S = 0
-    )  %>%
-    mutate(
-      S_old = ifelse(lag(S) + temp_minus_mu_minus_C > 0 & !is.na(lag(S)),
-                     lag(S) + temp_minus_mu_minus_C, 0),
-      S = S_old
-      ) %>%
-    ungroup()
+    )  
+  
+  
+    for (i in 2:nrow(cusum_data)) {
+    	cusum_data$S[i] = ifelse(cusum_data$S[i-1] + cusum_data$temp_minus_mu_minus_C[i] > 0,
+    				 cusum_data$S[i-1] + cusum_data$temp_minus_mu_minus_C[i], 0)
+    }
+ 
     
   first_occur <- cusum_data %>% 
     # only days above the threshold
@@ -234,4 +227,4 @@ C_list <- c(1, 2, 3, 4)
 cross2(T_list, C_list) %>%
 	walk(lift(cusum_yearly))
 ```
-The results would lead me to conclude that temperatures have not increased in our observation period. A few successful reaches of the threshold are achieved, but these are only at low T values with small C values as well. For the majority of the models, the threshold is not met. Since each model has a random chance of falsely exceeding a threshold earlier than its true value would suggest, I would not say the temperatures have increased overall.
+The results would lead me to conclude that temperatures have not increased in our observation period. A few successful reaches of the threshold are achieved, but these are only with small C values. For the majority of the models, the threshold is not met. Since each model has a random chance of falsely exceeding a threshold earlier than its true value would suggest, I would not say the temperatures have increased overall.
