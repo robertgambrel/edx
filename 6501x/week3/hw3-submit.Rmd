@@ -1,0 +1,83 @@
+---
+title: "Homework 3"
+author: "Robert Gambrel"
+date: "May 31, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+pacman::p_load(dplyr, readr, purrr, outliers, ggplot2, lubridate, tidyr, stats, smooth, tibble, magrittr)
+
+
+temps <- read_tsv('temps.txt')
+
+temps_sorted <- temps %>%
+	gather(year, high_temp, 2:21) %>%
+	group_by(year) %>%
+	mutate(rn = 1:n()) %>%
+	ungroup() %>%	
+	arrange(year, rn) %>%
+	select(high_temp)
+
+series <- ts(temps_sorted$high_temp, frequency = 123)
+
+m <- HoltWinters(x = series, seasonal = 'mult', beta = F)
+plot(m)
+plot(fitted(m))
+
+m <- es(series, model = "AAM")
+plot(m)
+plot(fitted(m))
+m$model
+m$formula
+m$initial
+m$initialSeason
+fit <- as.tibble(m$fitted)
+fit$year <- 0
+```
+
+```{r}
+fit %<>%
+  mutate(
+    n = 1:n()
+  )
+
+for (i in 1:20) {
+  fit %<>%
+    mutate(
+      year = ifelse((i - 1)*123 < n & n <= i*123, i, year)
+    )
+}
+
+fit %<>%
+  group_by(year) %>%
+  mutate(
+    rn = 1:n()
+  )
+
+ggplot(data = fit) +
+  geom_line(aes(x = rn, y = `Series 1`, col = year, group = year))
+```
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
