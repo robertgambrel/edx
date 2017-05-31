@@ -1,7 +1,7 @@
 ---
 title: "Gambrel 6501x HW 2"
 author: "Robert Gambrel"
-date: "May 23, 2017"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: pdf_document
 ---
 
@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r wd}
+```{r wd, echo = F}
 rm(list = ls())
 
 if (Sys.info()[[1]] == "Windows") {
@@ -25,6 +25,7 @@ set.seed(42)
 # Q1
 
 Political scientists frequently ask respondents a range of questions to gauge respondents' attitudes towards social, economic, and security issues. These questions can then be used to categorize individuals into political clusters (libertarian, populist, progressive, conservative, etc.) that are more fine-grained than simple party affiliation. Predictors useful in categorizing voters could include:
+
 1. Support for government sponsored universal health insurance
 2. Support for flat vs. progressive tax systems
 3. Attitudes towards social issues and government's role in proscribing behaviors
@@ -89,7 +90,7 @@ The highest Crime ratio is 1993, but the second highest is 1969. The top value i
 
 # Q4
 
-A CUSUM model might be useful in determining at what point in the day traffic has transitioned from normal flow to rush-hour backups. By knowing both regular rush-hour times as well as identifying days that typically start earlier or later, emergency responders can make necessary continency plans about travel times.
+A CUSUM model might be useful in determining at what point in the day traffic has transitioned from normal flow to rush-hour backups. By knowing both regular rush-hour times as well as identifying days that typically start earlier or later, emergency responders can make necessary contingency plans about travel times.
 
 Such a model could use location data recorded by navigation devices and apps to determine mean travel times between select business districts and suburban areas. As commuters began their daily travel, the new travel times could be compared against the mean to determine whether travel had significantly slowed.
 
@@ -120,7 +121,7 @@ mean(temps_long[temps_long$rn <= 30,]$high_temp, na.rm = T)
 mean(temps_long[temps_long$rn >= 90,]$high_temp, na.rm = T)
 
 ```
-Looking at the data, there is clearly a downward trend starting around day 75, or the middle of August. Mean temperature in July is 88.8 degrees, while in October it is 73.7 degrees. To calculate a CUSUM approach, I recreate the model shown in the lecture. I calculate mu independently for each year.
+Looking at the data, there is clearly a downward trend starting by day 75, or the middle of August. Mean temperature in July is 88.8 degrees, while in October it is 73.7 degrees. To calculate a CUSUM approach, I recreate the model shown in the lecture. I calculate mu independently for each year.
 
 ```{r}
   
@@ -142,9 +143,9 @@ cusum <- function(T, C, print_result = F) {
     )  
     
     for (i in 2:nrow(cusum_data)) {
-	cusum_data$S[i] = ifelse(cusum_data$S[i-1] + cusum_data$mu_minus_temp_minus_c[i] > 0
-				 & cusum_data$year[i] == cusum_data$year[i-1],
-				 cusum_data$S[i-1] + cusum_data$mu_minus_temp_minus_c[i], 0)
+    	cusum_data$S[i] = ifelse(cusum_data$S[i-1] + cusum_data$mu_minus_temp_minus_c[i] > 0
+    				                   & cusum_data$year[i] == cusum_data$year[i-1],
+    				                   cusum_data$S[i-1] + cusum_data$mu_minus_temp_minus_c[i], 0)
     }
     
   first_occur <- cusum_data %>% 
@@ -174,7 +175,7 @@ cross2(T_list, C_list) %>%
 	walk(lift(cusum))
 
 ```
-In general, it appears that the day the threshold is met is around day 95-110, which looks reasonable from the graph. I would prefer a somewhat more conservative measure, so I would choose T = 125, C = 2.
+In general, it appears that the day the threshold is met is around day 95-110, which looks reasonable from the graph. I would prefer a somewhat more conservative measure, so I would choose T = 125, C = 2. This model seems to work consistently across years.
 
 
 # 5.2
