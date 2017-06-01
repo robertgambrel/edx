@@ -8,6 +8,11 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+# Q1
+
+I've been trying to lose a few pounds this summer. A lot of guidance online suggests checking weight daily but looking only at weekly averages, since daily fluctuations can be drastic and not reflective of actual fat loss. How much water/food was ingested recently, how much salt, how recently you used the bathroom, and other factors give each weigh-in a lot of randomness around the 'true' value. I would therefore use a low alpha - this would emphasize the long-term trend instead of the day-to-day fluctuations.
+
+# Q2
 
 ```{r}
 pacman::p_load(dplyr, readr, purrr, outliers, ggplot2, lubridate, tidyr, stats, smooth, tibble, magrittr)
@@ -62,22 +67,31 @@ fit %<>%
 ggplot(data = fit) +
   geom_line(aes(x = rn, y = `Series 1`, col = year, group = year))
 ```
-## R Markdown
+# Q4
+```{r}
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+crime <- read_tsv("http://www.statsci.org/data/general/uscrime.txt")
 
-```{r cars}
-summary(cars)
+
+model <- lm(Crime ~ M + So + Ed + Po1 + Po2 + LF + M.F + Pop +
+			  NW + U1 + U2 + Wealth + Ineq + Prob + Time, 
+			  data = crime)
+summary(model)
+
+model2 <- lm(Crime ~ M + Ed + Po1 + Po2 +
+			  U1 + U2 + Ineq + Prob, 
+			  data = crime)
+summary(model2)
+
+AIC(model)
+AIC(model2)
+
+BIC(model)
+BIC(model2)
+
+new_data <- data.frame(M = 14.0, Ed = 10.0, Po1 = 12.0, Po2 = 15.5,
+			     U1 = 0.120, U2 = 3.6, Ineq = 20.1, Prob = 0.04)
+
+predict(model2, new_data)
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
