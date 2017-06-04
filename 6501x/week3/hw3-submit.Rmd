@@ -64,8 +64,9 @@ fit %<>%
     rn = 1:n()
   )
 
-ggplot(data = fit) +
-  geom_line(aes(x = rn, y = `Series 1`, col = year, group = year))
+ggplot(data = fit[fit$year %in% c(1, 5, 10, 15, 20),]) +
+  geom_line(aes(x = rn, y = `Series 1`, col = as.factor(year), group = as.factor(year)))
+  
 ```
 # Q4
 ```{r}
