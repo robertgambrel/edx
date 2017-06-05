@@ -55,4 +55,20 @@
   - Doesn't differentiate b/w cost of false positives and false negatives
   
 # Confusion matrices
-- 
+- Of all predictions, how many are true positives, true negatives, false of both
+- Can weight each cell - situationally driven comparison
+  - If false positives and false negatives are differently important, can test sensitive vs specific models
+  
+# Advanced topics
+- Poisson regression: think response is a count variable
+- Splines: function of polynomials that connect to each other
+  - must be smooth at knots
+  - Allow different functions for different parts of the dataset
+  - MARS - multi-adaptive regression splines
+- Bayesian regression
+  - Use both data and initial estimate of how coefficients and errors are distributed
+  - Helpful when have few data
+  - Combine priors (can be expert or uniform / uniformed) with data
+- k-nearest neighbot
+  - Don't try to weight attributes
+  - Just plot all the data we have, find k closest neighbors, find their average outcome value, and give that to the new data point
