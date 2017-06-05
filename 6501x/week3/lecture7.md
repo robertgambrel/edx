@@ -1,86 +1,144 @@
-# Exponential Smoothing
-- Used for time series data
-- It will have trends - might be increasing or decreasing
-- Could have cyclical trends (seasonal temps)
-- But there's also randomness
-  - Random fluctuations that don't show a trend or real pattern
-- S_t: expected baseline response at time period t
-- x_t: observed response
-- If you think observed indicator is very good, could say S_t = x_t
-- If you don't trsut the observation, would say S_t = S_(t-1) (current baseline = prior baseline)
-- Exponential smoothing:
-  - S_t = alpha*x_t + (1 - alpha)*S_(t-1)
-  - alpha = 0: a lot of randomness, don't trust observations
-  - alpha near 1: not much randomness in the system, so trust the observation
-- How to start: S_1 = x_1
-- Does not deal with trends or cyclical variations (yet)
+---
+title: "Homework 3"
+author: "Robert Gambrel"
+date: "May 31, 2017"
+output: pdf_document
+---
 
-# Trends
-- T_t: trend at time t
-- S_t = alpha*x_t + (1 - alpha)*(S_(t-1) + T_(t-1))
-- T_t is also computed like the baseline:
-  - T_t = beta*(S_t - S_(t-1)) + (1 - beta)*T_(t-1)
-- Initial condition: T_1 = 0
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Q1
 
-# Cyclic patterns
-- Seasonalities: are multiplicatives
-  - L: length of cycle
-  - C_t: multiplicative seasonality factor for time t
-- New baseline formula:
-  - S_t = alpha*x_t / C_(t-L) + (1 - alpha)*(S_(t-1) + T_(t-1))
-- Update seasonal factor in the same way
-  - C_t = gamma(x_t / S_t) + (1 - gamma)*C_(t-L)
-  - No initial cyclic effect - all set to 1
-- C = 1.1: expect 10% higher value at time t just because of the cycle it's on
+I've been trying to lose a few pounds this summer. A lot of guidance online suggests checking weight daily but looking only at weekly averages, since daily fluctuations can be drastic and not reflective of actual fat loss. How much water/food was ingested recently, how much salt, how recently you used the bathroom, and other factors give each weigh-in a lot of randomness around the 'true' value. I would therefore use a low alpha - this would emphasize the long-term trend instead of the day-to-day fluctuations.
 
-# Exponential smoothing - meaning
-- since it's recursive, have (1-alpha) ^ N multiplying up to infinite past terms
-- So don't think that it's only single prior baseline estimate - all of them are, but are weighted downwards exponentially
+# Q2
 
+```{r}
+pacman::p_load(dplyr, readr, purrr, outliers, ggplot2, lubridate, tidyr, stats, smooth, tibble, magrittr)
 
-# Forecasting
-- Can do simple forecasting with exponential smoothing
-- To predict, best estimate of x_(t+t) is S_t, so your forecast is constant
-- If you add a trend, then best estimate of next baseline is current baseline, similar for trend
-  - F_(t+1) = S_t + T_t
-- For multiplicative seasonality:
-  - Best estimate of C_(t+1) is the latest estimate for that same cycle: C_(t - L + 1)
-  - F_(t+1) = (S_t + T_t) * C_(t - L + 1)
- 
-# How to find best values of alpha, beta, gamma?
-- Optimize to minimize (F_t - x_t)^2
-- Time series methods
+# temps <- read_tsv('T:\\Clients\\WIP\\EJGH\\Data Science Team\\RG\\trainings\\temps-new.txt')
+temps <- read_tsv('temps.txt')
+
+temps_sorted <- temps %>%
+	gather(year, high_temp, 2:21) %>%
+	group_by(year) %>%
+	mutate(rn = 1:n()) %>%
+	ungroup() %>%	
+	arrange(year, rn) %>%
+	select(high_temp)
+
+series <- ts(temps_sorted$high_temp, frequency = 123)
+
+m <- HoltWinters(x = series, seasonal = 'mult', beta = F)
+plot(m)
+plot(fitted(m))
+fitted <- m$fitted
+seasons <- fitted[, 3]
+
+seasons <- as.data.frame(seasons)
+seasons %<>%
+	mutate(
+		rn = 1:n()
+		) %>%
+	mutate(
+		year = ceiling(rn / 123)
+	) %>%
+	group_by(year) %>%
+	mutate(day = 1:n()) %>%
+	ungroup()
+
+seasonals <- seasons %>%
+	group_by(year) %>%
+	summarize(
+		mean_mult = mean(x, na.rm = T)
+	)
+
+firsts <- seasons %>%
+	filter(x <= 0.9) %>%
+	# keep first occurence of seasonal multiplier <= .95 each year 
+	group_by(year) %>%
+	slice(1)
+
+seasonals
+firsts
+
+#m <- es(series, model = "AAM")
+#plot(m)
+#plot(fitted(m))
+#m$model
+#m$formula
+#m$initial
+#m$initialSeason
+#fit <- as.tibble(m$fitted)
+#fit$year <- 0
+
+#series_short <- ts(temps_sorted$high_temp[1:123])
+#m_short <- HoltWinters(x = series_short, beta = F, gamma = F)
+```
+
+```{r}
+fit %<>%
+  mutate(
+    n = 1:n()
+  )
+
+for (i in 1:20) {
+  fit %<>%
+    mutate(
+      year = ifelse((i - 1)*123 < n & n <= i*123, i, year)
+    )
+}
+
+fit %<>%
+  group_by(year) %>%
+  mutate(
+    rn = 1:n()
+  )
+
+ggplot(data = fit[fit$year %in% c(1, 5, 10, 15, 20),]) +
+  geom_line(aes(x = rn, y = `Series 1`, col = as.factor(year), group = as.factor(year)))
   
-# ARIMA
-- 3 key parts:
-  - Differences
-    - The baseline exponential smoothing function works best with stationary data
-    - If data isn't stationary, the differences might be
-    - Might need D differences
-  - Autoregression
-    - Predicting current values based on prior values
-    - Smoothing equation is AR - uses all prior values
-    - But could also use only a few models (p-periods)
-  - Moving Average
-    - Previous errors as predictors (order q)
-  - Software can optimize p, d, q
-- Can also add seasonality
-  - ARIMA(0,0,0) is white noise
-  - ARIMA(0, 1, 0) is random walk
-  - ARIMA(p, 0, 0) is AR model
-  - ARIMA(0, 0, q) is MA model
-  - ARIMA(0, 1, 1) is basic exponential smoothing model
-- Better for forecasting than exponential smoothing when data is more stable
-  - Need at least 40+ obs
-- How to forecase variance of future obs?
+```
 
-# GARCH
-- Generalized Autoregressive Conditional Heteroskedasticity
-- Estimate or forecast the variance
-  - Estimated amount of error
-- Similar format to ARIMA equation
-  - Except deals only with variances / squared errors, not actual observation
-  - Only addresses raw variances, not differences
-  
+I fit a Holt Winters model to the data, using seasonal multipliers (period = 123 days). Since these values can update over time, I check two factors: first, whether the average yearly seasonal mulitplier is chaning year-to-year. Second, whether the seasonal multiplier falls below a threshold (0.9) earlier from year to year.
+
+In both cases, the results don't suggest that summer is ending earlier.
+
+# Q3
+
+We recently had to buy a car and decided to purchase a used SUV. We consulted several resources to find a fair price, and all of them ask about several factors that determine a vehicle's dollar price. Things like age, mileage, and condition matter for pretty much every car. In addition, certian models have different available options (leather interior, bluetooth audio, backup cameras) that are binary options that can also add to the value of the car. 
+
+# Q4
+```{r}
 
 
+crime <- read_tsv("http://www.statsci.org/data/general/uscrime.txt")
+
+
+model <- lm(Crime ~ M + So + Ed + Po1 + Po2 + LF + M.F + Pop +
+			  NW + U1 + U2 + Wealth + Ineq + Prob + Time, 
+			  data = crime)
+summary(model)
+
+model2 <- lm(Crime ~ M + Ed + Po1 + Po2 +
+			  U1 + U2 + Ineq + Prob, 
+			  data = crime)
+summary(model2)
+
+AIC(model)
+AIC(model2)
+
+BIC(model)
+BIC(model2)
+
+new_data <- data.frame(M = 14.0, Ed = 10.0, Po1 = 12.0, Po2 = 15.5,
+			     U1 = 0.120, U2 = 3.6, Ineq = 20.1, Prob = 0.04)
+
+predict(model2, new_data)
+```
+I originally fit a model with every variable included. However, many did not relate to the outcome variable. I dropped all those that were not significant, except I kept variables that were part of a cluster of variables that had at least one significant variable (for example, I kept U1 since U2 was significant).
+
+Removing these unnecessary variables improves the model's penalized fits: Adjusted R-squared increases from 0.70 to 0.73. AIC and BIC both drop by substantial amounts. 
+
+Using the important variables from the hypothetical case, I predict that crime rates would be 820, which is just below the median state in the current data.
