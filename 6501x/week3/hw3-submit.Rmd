@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 # Q1
 
-I've been trying to lose a few pounds this summer. A lot of guidance online suggests checking weight daily but looking only at weekly averages, since daily fluctuations can be drastic and not reflective of actual fat loss. How much water/food was ingested recently, how much salt, how recently you used the bathroom, and other factors give each weigh-in a lot of randomness around the 'true' value. I would therefore use a low alpha - this would emphasize the long-term trend instead of the day-to-day fluctuations.
+I've been trying to lose a few pounds this summer. A lot of guidance online suggests checking weight daily but looking only at weekly averages, since daily fluctuations can be drastic and not reflective of actual fat loss. How much water/food was ingested recently, how much salt, how recently you used the bathroom, and other factors give each weigh-in a lot of randomness around the 'true' value. I would therefore expect to need a low alpha - this would emphasize the long-term trend instead of the day-to-day fluctuations.
 
 # Q2
 
@@ -37,10 +37,12 @@ m <- HoltWinters(x = series, seasonal = 'mult', beta = F)
 plot(m)
 plot(fitted(m))
 fitted <- m$fitted
+# Seasonal multipliers
 seasons <- fitted[, 3]
 
 seasons <- as.data.frame(seasons)
 seasons %<>%
+	# Re-calculate the years
 	mutate(
 		rn = 1:n()
 		) %>%
@@ -51,15 +53,17 @@ seasons %<>%
 	mutate(day = 1:n()) %>%
 	ungroup()
 
+# Mean seasonal multiplier for the year - are they on average higher in one year vs. another?
 seasonals <- seasons %>%
 	group_by(year) %>%
 	summarize(
 		mean_mult = mean(x, na.rm = T)
 	)
 
+# First day the seasonal multiplier drops below a threshold
 firsts <- seasons %>%
 	filter(x <= 0.9) %>%
-	# keep first occurence of seasonal multiplier <= .95 each year 
+	# keep first occurence of seasonal multiplier <= .90 each year 
 	group_by(year) %>%
 	slice(1)
 
