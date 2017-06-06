@@ -17,7 +17,7 @@ I've been trying to lose a few pounds this summer. A lot of guidance online sugg
 ```{r}
 pacman::p_load(dplyr, readr, purrr, outliers, ggplot2, lubridate, tidyr, stats, smooth, tibble, magrittr)
 
-
+# temps <- read_tsv('T:\\Clients\\WIP\\EJGH\\Data Science Team\\RG\\trainings\\temps-new.txt')
 temps <- read_tsv('temps.txt')
 
 temps_sorted <- temps %>%
@@ -33,16 +33,48 @@ series <- ts(temps_sorted$high_temp, frequency = 123)
 m <- HoltWinters(x = series, seasonal = 'mult', beta = F)
 plot(m)
 plot(fitted(m))
+fitted <- m$fitted
+seasons <- fitted[, 3]
 
-m <- es(series, model = "AAM")
-plot(m)
-plot(fitted(m))
-m$model
-m$formula
-m$initial
-m$initialSeason
-fit <- as.tibble(m$fitted)
-fit$year <- 0
+seasons <- as.data.frame(seasons)
+seasons %<>%
+	mutate(
+		rn = 1:n()
+		) %>%
+	mutate(
+		year = ceiling(rn / 123)
+	) %>%
+	group_by(year) %>%
+	mutate(day = 1:n()) %>%
+	ungroup()
+
+seasonals <- seasons %>%
+	group_by(year) %>%
+	summarize(
+		mean_mult = mean(x, na.rm = T)
+	)
+
+firsts <- seasons %>%
+	filter(x <= 0.9) %>%
+	# keep first occurence of seasonal multiplier <= .95 each year 
+	group_by(year) %>%
+	slice(1)
+
+seasonals
+firsts
+
+#m <- es(series, model = "AAM")
+#plot(m)
+#plot(fitted(m))
+#m$model
+#m$formula
+#m$initial
+#m$initialSeason
+#fit <- as.tibble(m$fitted)
+#fit$year <- 0
+
+#series_short <- ts(temps_sorted$high_temp[1:123])
+#m_short <- HoltWinters(x = series_short, beta = F, gamma = F)
 ```
 
 ```{r}
@@ -68,6 +100,15 @@ ggplot(data = fit[fit$year %in% c(1, 5, 10, 15, 20),]) +
   geom_line(aes(x = rn, y = `Series 1`, col = as.factor(year), group = as.factor(year)))
   
 ```
+
+I fit a Holt Winters model to the data, using seasonal multipliers (period = 123 days). Since these values can update over time, I check two factors: first, whether the average yearly seasonal mulitplier is chaning year-to-year. Second, whether the seasonal multiplier falls below a threshold (0.9) earlier from year to year.
+
+In both cases, the results don't suggest that summer is ending earlier.
+
+# Q3
+
+We recently had to buy a car and decided to purchase a used SUV. We consulted several resources to find a fair price, and all of them ask about several factors that determine a vehicle's dollar price. Things like age, mileage, and condition matter for pretty much every car. In addition, certian models have different available options (leather interior, bluetooth audio, backup cameras) that are binary options that can also add to the value of the car. 
+
 # Q4
 ```{r}
 
@@ -96,3 +137,8 @@ new_data <- data.frame(M = 14.0, Ed = 10.0, Po1 = 12.0, Po2 = 15.5,
 
 predict(model2, new_data)
 ```
+I originally fit a model with every variable included. However, many did not relate to the outcome variable. I dropped all those that were not significant, except I kept variables that were part of a cluster of variables that had at least one significant variable (for example, I kept U1 since U2 was significant).
+
+Removing these unnecessary variables improves the model's penalized fits: Adjusted R-squared increases from 0.70 to 0.73. AIC and BIC both drop by substantial amounts. 
+
+Using the important variables from the hypothetical case, I predict that crime rates would be 820, which is just below the median state in the current data.
