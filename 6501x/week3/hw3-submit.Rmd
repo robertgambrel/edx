@@ -2,7 +2,9 @@
 title: "Homework 3"
 author: "Robert Gambrel"
 date: "May 31, 2017"
-output: pdf_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -78,27 +80,27 @@ firsts
 ```
 
 ```{r}
-fit %<>%
-  mutate(
-    n = 1:n()
-  )
-
-for (i in 1:20) {
-  fit %<>%
-    mutate(
-      year = ifelse((i - 1)*123 < n & n <= i*123, i, year)
-    )
-}
-
-fit %<>%
-  group_by(year) %>%
-  mutate(
-    rn = 1:n()
-  )
-
-ggplot(data = fit[fit$year %in% c(1, 5, 10, 15, 20),]) +
-  geom_line(aes(x = rn, y = `Series 1`, col = as.factor(year), group = as.factor(year)))
-  
+# fit %<>%
+#   mutate(
+#     n = 1:n()
+#   )
+# 
+# for (i in 1:20) {
+#   fit %<>%
+#     mutate(
+#       year = ifelse((i - 1)*123 < n & n <= i*123, i, year)
+#     )
+# }
+# 
+# fit %<>%
+#   group_by(year) %>%
+#   mutate(
+#     rn = 1:n()
+#   )
+# 
+# ggplot(data = fit[fit$year %in% c(1, 5, 10, 15, 20),]) +
+#   geom_line(aes(x = rn, y = `Series 1`, col = as.factor(year), group = as.factor(year)))
+#   
 ```
 
 I fit a Holt Winters model to the data, using seasonal multipliers (period = 123 days). Since these values can update over time, I check two factors: first, whether the average yearly seasonal mulitplier is chaning year-to-year. Second, whether the seasonal multiplier falls below a threshold (0.9) earlier from year to year.
