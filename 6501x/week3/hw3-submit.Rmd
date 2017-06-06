@@ -26,7 +26,6 @@ temps <- read_tsv('temps.txt')
 series <- ts(temps[2:21], frequency = 123)
 
 m <- HoltWinters(x = series, seasonal = 'mult', beta = F)
-plot(m)
 plot(fitted(m))
 fitted <- m$fitted
 # Seasonal multipliers
@@ -59,50 +58,15 @@ firsts <- seasons %>%
 	group_by(year) %>%
 	slice(1)
 
-seasonals
-firsts
+print(seasonals)
+print(firsts)
 
-#m <- es(series, model = "AAM")
-#plot(m)
-#plot(fitted(m))
-#m$model
-#m$formula
-#m$initial
-#m$initialSeason
-#fit <- as.tibble(m$fitted)
-#fit$year <- 0
 
-#series_short <- ts(temps_sorted$high_temp[1:123])
-#m_short <- HoltWinters(x = series_short, beta = F, gamma = F)
 ```
 
-```{r}
-# fit %<>%
-#   mutate(
-#     n = 1:n()
-#   )
-# 
-# for (i in 1:20) {
-#   fit %<>%
-#     mutate(
-#       year = ifelse((i - 1)*123 < n & n <= i*123, i, year)
-#     )
-# }
-# 
-# fit %<>%
-#   group_by(year) %>%
-#   mutate(
-#     rn = 1:n()
-#   )
-# 
-# ggplot(data = fit[fit$year %in% c(1, 5, 10, 15, 20),]) +
-#   geom_line(aes(x = rn, y = `Series 1`, col = as.factor(year), group = as.factor(year)))
-#   
-```
+I fit a Holt Winters model to the data, using seasonal multipliers (period = 123 days). Since these values can update over time, I check two factors: first, whether the average yearly seasonal mulitplier is changing year-to-year. Second, whether the seasonal multiplier falls below a threshold (0.9) earlier from year to year.
 
-I fit a Holt Winters model to the data, using seasonal multipliers (period = 123 days). Since these values can update over time, I check two factors: first, whether the average yearly seasonal mulitplier is chaning year-to-year. Second, whether the seasonal multiplier falls below a threshold (0.9) earlier from year to year.
-
-In both cases, the results don't suggest that summer is ending earlier.
+In both cases, the results don't suggest that summer is ending earlier. The multiplier is pretty constant, and the first day below the threshold does not change either.
 
 # Q3
 
