@@ -3,8 +3,8 @@ title: "Homework 3"
 author: "Robert Gambrel"
 date: "May 31, 2017"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -17,7 +17,8 @@ I've been trying to lose a few pounds this summer. A lot of guidance online sugg
 # Q2
 
 ```{r}
-pacman::p_load(dplyr, readr, purrr, outliers, ggplot2, lubridate, tidyr, stats, smooth, tibble, magrittr)
+pacman::p_load(dplyr, readr, purrr, outliers, ggplot2, lubridate, 
+               tidyr, stats, smooth, tibble, magrittr)
 
 # temps <- read_tsv('T:\\Clients\\WIP\\EJGH\\Data Science Team\\RG\\trainings\\temps-new.txt')
 temps <- read_tsv('temps.txt')
