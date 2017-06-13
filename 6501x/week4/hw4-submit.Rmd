@@ -1,0 +1,187 @@
+---
+title: "Homework 4"
+author: "Robert Gambrel"
+date: "June 12, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Q1
+
+```{r, message=FALSE}
+pacman::p_load(dplyr, readr, purrr, outliers, ggplot2, lubridate, 
+			tidyr, stats, smooth, tibble, magrittr, tree,
+			randomForest)
+
+set.seed(2)
+
+crime <- read_tsv("http://www.statsci.org/data/general/uscrime.txt")
+
+crime_scaled <- as.data.frame(scale(crime))
+
+pca <- prcomp(~M + So + Ed + Po1 + Po2 + LF + M.F + Pop +
+			  NW + U1 + U2 + Wealth + Ineq + Prob + Time,
+	data = crime_scaled, scale. = T)
+```
+
+I first scale all the variables in the dataset and determine the principal components. 
+
+I then estimate a model using the first 4 components and compare the fit with the model I used last week. My prior model used a subset of the available predictors.
+
+
+```{r, message=FALSE}
+pca$sd
+
+newvars <- as.data.frame(pca$x[, 1:4])
+
+crime2 <- cbind(Crime = crime_scaled$Crime, newvars)
+
+model <- lm(Crime ~ PC1 + PC2 + PC3 + PC4,
+		data = crime2)
+
+model_old <- lm(Crime ~ M + Ed + Po1 + Po2 +
+			  U1 + U2 + Ineq + Prob,
+			data = crime_scaled)
+
+summary(model)
+summary(model_old)
+AIC(model)
+AIC(model_old)
+BIC(model)
+BIC(model_old)
+
+```
+The PCA model does not do as good a job at fitting the outcome variable as my previous model using the  variables separately. Even though the AIC and BIC penalize using additional variables, these measures still favor the original model due to the much improved R-squared value. Many of the PCA components 5-15 appeared to capture a decent proportion of remaining variance, even though they are not as large as the first 4.
+
+The model calculated using principal components can also be expressed in terms of the original values, using a simple linear combination of each component's regression coefficient and scalar multiplier for the original predictors.
+
+```{r}
+# PCA regression coefficients
+pca_coefs <- model$coefficients[2:5]
+pca_coefs
+
+# Components of each of the first 4 components
+component_weights <- pca$rotation[, 1:4]
+component_weights
+
+# matrix product
+component_weights %*% pca_coefs
+```
+
+# Q2
+```{r}
+model <- tree(Crime ~., data = crime_scaled)
+summary(model)
+#model$frame
+#model$where
+plot(model)
+text(model)
+
+plot(prune.tree(model))
+```
+# The tree chooses 7 nodes, as this is the point at which overall deviance is minimized without making any node too small. The most important factor is Po1, or per-capita expenditure. It is actually used at two nodes. Population is also an important factor and works at multiple nodes as well. 
+
+```{r}
+
+model2 <- randomForest(Crime ~ ., data = crime_scaled, ntree = 1000,
+				importance = T)
+model2$importance
+mean(model2$rsq)
+plot(model2)
+
+tuned <- tuneRF(crime[, 1:15], crime[[16]], doBest = T, ntreeTry = 1000,
+			importance = T)
+tuned$importance
+
+hist(treesize(tuned))
+```
+# The forest identifies Po1, Po2, NW, and Prob as key drivers in predicting crime rates. Wealth is also important. Unlike the tree, LF is of lower importance (though still of moderate amount), along with U2 and Ed. The random forest model also tends to use many more nodes per tree - a median around 15, as compared to the single-tree model which used 7. This is to be expected, as the most optimal variable to split on at any given node has a good chance of being excluded from the list of choices.
+
+
+# Q3
+
+My boss likes to work from home a couple days a week. He doesn't always tell us when those days will be, but we could develop a model to predict whether or not he will be in the office. Predictors would include whether a given day is a school holiday or a Monday/Friday (to stretch out the weekend). Morning traffic and weather reports would also help, as he has a relatively long road commute. I would also include the portion of the day he has scheduled for conference calls with other offices - if he's booked all day in meetings he can participate in from anywhere, I've noticed he tends to just make the calls from home.
+
+# Q4
+
+```{r}
+# Read in, keeping strings as all factor variables
+credit <- read.table('http://archive.ics.uci.edu/ml/machine-learning-databases/statlog/german/german.data',
+			header = F)
+
+names(credit) <- c('check_acct_status', 'duration', 'credit_history',
+				  'purpose', 'credit_amt', 'savings', 'employment',
+				  'install_rate', 'personal_status', 'other_guarantors',
+				  'time_in_residence', 'property', 'age', 'other_debts',
+				  'housing', 'credit_cards', 'job', 'dependents',
+				  'phone', 'foreign', 'approve')
+
+# recode credit: 2 = bad
+credit %<>%
+	mutate(
+		approve = 2 - approve
+	)
+```
+
+I fit a logit model on whether or not credit is approved.
+
+```{r}
+pacman::p_load(pscl)
+model <- glm(approve ~ ., family = binomial(link = 'logit'),
+			data = credit)
+summary(model)
+
+
+```
+Many of the variables show a significant relationship with credit approval. However, a few can be dropped, as no levels of the categorical variables `property`, `job`, or `phone` are significant, nor are the continuous variables `time_in_residence`, `credit_cards`, or `dependents`.
+
+```{r}
+model2 <- glm(approve ~ check_acct_status + duration + credit_history +
+				  purpose + credit_amt + savings + employment +
+				  install_rate + personal_status + other_guarantors +
+				  age + other_debts + housing + foreign, family = binomial(link = logit),
+			    data = credit)
+summary(model2)
+AIC(model2)
+BIC(model2)
+pscl::pR2(model2)
+```
+This model has a reasonable fit - 2 approaches to calculating pseudo-R-squared report it at 0.259 and 0.272, while another puts it at 0.385. 
+
+I now set up a scoring dataset to determine the 'cost' associated with different types of misclassifications.
+
+```{r}
+# dataframe: actual approval, model likelihood of approval, empty score column
+scoring <- data.frame(actual = credit$approve, estimate = model2$fitted.values, score = 0)
+
+score_fn <- function(threshold) {
+	total_costs <- scoring %>%
+	  # update score column: if false neg then 1, if false positive then 5, else 0
+		mutate(
+			score = ifelse(estimate < threshold & actual == 1, 1,
+					ifelse(estimate > threshold & actual == 0, 5, 0))
+		) %>%
+	  # find sum of all the scores
+		select_('score') %>%
+		sum()
+
+	return(total_costs)
+} 
+
+# initialize a dataframe: a range of thresholds to try, empty total scores
+results <- data.frame(threshold = seq(0.1, .99, by = 0.01), total_score = 0)
+
+for (i in 1:nrow(results)) {
+	results$total_score[i] <- score_fn(results$threshold[i])
+}
+
+ggplot(data = results) +
+	geom_line(aes(x = threshold, y = total_score))
+
+results[results$total_score == min(results$total_score),]
+```
+Because of the high costs of incorrectly approving a bad customer, the most appropriate threshold is relatively high: 0.83. While this value will likely restrict some qualified applicants from being approved, it will more aggressively screen out the costlier, riskier pool.
+
