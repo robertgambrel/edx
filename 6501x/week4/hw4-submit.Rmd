@@ -82,7 +82,8 @@ text(model)
 
 plot(prune.tree(model))
 ```
-# The tree chooses 7 nodes, as this is the point at which overall deviance is minimized without making any node too small. The most important factor is Po1, or per-capita expenditure. It is actually used at two nodes. Population is also an important factor and works at multiple nodes as well. 
+
+The tree chooses 7 nodes, as this is the point at which overall deviance is minimized without making any node too small. The most important factor is Po1, or per-capita expenditure. It is actually used at two nodes. Population is also an important factor and works at multiple nodes as well. 
 
 ```{r}
 
@@ -98,7 +99,10 @@ tuned$importance
 
 hist(treesize(tuned))
 ```
-# The forest identifies Po1, Po2, NW, and Prob as key drivers in predicting crime rates. Wealth is also important. Unlike the tree, LF is of lower importance (though still of moderate amount), along with U2 and Ed. The random forest model also tends to use many more nodes per tree - a median around 15, as compared to the single-tree model which used 7. This is to be expected, as the most optimal variable to split on at any given node has a good chance of being excluded from the list of choices.
+
+The forest identifies Po1, Po2, NW, and Prob as key drivers in predicting crime rates. Wealth is also important. Unlike the tree, LF is of lower importance (though still of moderate amount), along with U2 and Ed. I also test various values for the number of variables to test when creating a new node - the model shows that choosing from 3 randomly chosen variables produces the best results.
+
+The random forest model also tends to use many more nodes per tree - a median around 15, as compared to the single-tree model which used 7. This is to be expected, as the most optimal variable to split on at any given node has a good chance of being excluded from the list of choices.
 
 
 # Q3
