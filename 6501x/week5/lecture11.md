@@ -67,5 +67,14 @@
     - Ridge shrinks coefficients towards 0 to reduce variance in the estimates
       - Adds some bias, but reduces variance
     - Prediction error is a function of both bias and variance, so finding a middle ground on both is best approach
+    - Advantages of elastic net:
+      - variable selection benefits of LASSO
+      - Predictive benefits of Ridge regression
+    - Disadvantages
+      - Arbitrarily rules out some correlated variables (like LASSO)
+        - IE if one variable is cheap to obtain and another is expensive, LASSO will choose one randomly if they're doing the same amount of work
+      - Underestimates coefficients of very predcitive variables (like Ridge)
+  - In general, no good rule of thumb on which to choose
+  - Best to try multiple and compare the difference
     
     
