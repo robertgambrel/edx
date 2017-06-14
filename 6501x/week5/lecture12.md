@@ -59,3 +59,21 @@
   - can also do interactions between these
   
 # Multi-armed bandits
+- If you have 10 alternatives, and test them 1000 times each in order, you lose value if the best was the first one you tested
+- Exploration vs Exploitation
+  - Tradeoff getting more info vs immediate value
+- IE if you have 10 slot machines to play, how do you choose which one to stick with?
+  - suppose K alternatives, no info (each has equal prob of being best)
+  - Run some tests, sample to test again, but sample more from the ones you think are more likely to be best
+  - Test again, continue sampling based on update probabilities of which is best
+  - Repeat
+- Still doing exploration (randomly assigning test), but getting exploitation b/c more likely to test the higher-performing options
+- Parameters in interation
+  - Number of tests b/w recalculating probabilities
+  - How to update the probabilities (Bayesian? or just based on latest distributions)
+  - How to pick alternatives to test?
+    - Based purely on probabilities?
+    - Or probabilities weighted by expected values from success of each option?
+- No simple rule on what choices 
+  - But usually works best than a purely large random sample
+  - Helps you learn on the fly, and create value 
