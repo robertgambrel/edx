@@ -1,1 +1,61 @@
 # Experimental design
+- When you don't have the data already, need to design how to collect the data (design of experiments)
+- Survey
+  - need a representative sample
+  - Many dimensions, but not many data points
+  - Can you be representative of all combos of gender, politics, income, race?
+- Medical treatments
+- Maximizing agricultural productivity
+- Comparison and control
+  - Need to control for factors beyond the one you're interested in testing
+  - Ie red cars vs blue cars resale price
+    - Need to also control for age, body style, condition, etc.
+- Blocking
+  - Blocking factors can create variation
+    - ie body style: sports cars are more likely to be red than sedans
+  - So might want to analyze red sports cars vs. blue sports cars, and red sedans vs. red sedans
+    - Each set will have lower variance than had you done everything at once
+- A/B testing
+  - Example: banner ads
+    - If you have 2 versions, how do you decide which to show?
+    - Can use both ads for the first 2000 times its shown, random choice each time
+    - Then compare clicks on both
+    - Don't even need to predetermine that it's 2000 times - could just run and test the different click rates each time, stop as soon as it clears a significance threshold
+  - Helps you choose b/w 2 alternatives
+  - Good as long as:
+    - Can collect data quickly enough to get actionable data
+    - Data must be representative
+    - Amount of data to collect must be small compared w/ whole population
+      - IE don't want to use 2000 views to determine strategy when you only expect 2500 views total
+  - But what if you have several alternatives? 
+
+# Factorial Designs
+- Full factorial design
+  - test every combo - 2 fonts, 2 wordings, 2 backgrounds
+  - ANOVA to determine importance of each factor
+- What if there are a ton of combinations?
+  - Fractional factorial design - random subset of them
+- Fractional factorial
+  - instead of:
+    - arial - ms - white
+    - arial - ms - gold
+    - arial - ma - white
+    - arial - ma - gold
+    - robot - ms - white
+    - robot - ms - gold
+    - robot - ma - white
+    - robot - ma - gold
+  - do:
+    - arial - ms - white
+    - arial - ma - gold
+    - robot - ms - gold
+    - robot - ma - white
+  - this has:
+    - each choice appears the same # of times (twice)
+    - each pair of choices appears the same # of times (once)
+  - Is a balanced design
+- If you believe the factors are independent, then test a subset of combos, and then regress results
+  - Each factor is a categorical variable
+  - can also do interactions between these
+  
+# Multi-armed bandits
