@@ -1,1 +1,71 @@
-
+# Variable Selection
+- Applies to all factor-based models: classification, clustering, regression
+- 2 main reasons:
+  - Overfitting - # of factors is close to or larger than # of data points
+    - Accounts for random effects too much - makes out-of-sample performance weak
+    - If you have only a few points, the likelihood of finding a false relationship due to random sampling is higher
+  - Simplicity - want less complex
+    - Need less data
+    - Less chance of including insignificant factors
+    - Easier to interpret
+      - Models won't be trusted by non-data scientists
+    - Some factors are illegal / disallowed
+      - In US, can't use race, sex, religion, marital status for credit decisions
+      - Can't use factors highly correlated w/ forbidden ones
+      - Using a complex model with a bunch of interactions might proxy for those illegal factors, so hard to justify externally
+- How to do variable selection
+  - Forward selection approach
+    - start w/ no factors
+    - at each step, find best new factor
+      - if it's good enough, include it
+      - usually allow marginal significance as 'good enough' , <= .15
+    - once you have enough factors, or have no more good enough, fit the overall model
+    - remove factors w/ high p-value (optional, usually 0.05 cutoff)
+    - fit the final model
+  - Backward elimination
+    - start w/ all factors
+    - remove the worst factor that's p > .15
+    - refit, find the current worst, repeat
+    - Once you have nothing above 0.15, or have the # of factors you want, refit
+    - Remove anything with p > .05
+    - Fit final model
+  - Stepwise Regression
+    - Start w/ no factors
+    - Each step, add best new factor
+    - If it's good enough (p < .15), add it
+    - Fit model w/ current set
+    - Drop any that now have p > .15
+    - Continue until you have enough factors
+    - Drop any w/ p > 0.05
+    - Final model
+  - Could also use Model R-squared, or AIC/BIC to choose which variable to add
+  - These are all *greedy algorithms* - they take the 1 thing that looks best at each step
+    - Future options are not considered
+  - LASSO Approach
+    - Add constraint: minimize sum of squared errors, such that the sum of the (absolute value of the) coefficients is below a threshold tau
+    - Since we're constraining coefs, need to scale the data!
+    - How to choose tau:
+      - Depends on number of variables
+      - Quality of model
+      - Best tradeoff: use LASSO method w/ multiple values of tau, see how it goes
+  - Elastic Net
+    - Constrain both the sum of coeficients and their squares
+      - Weight sum of coefs by lambda
+      - Weight sum of squared coefs by 1-lambda
+      - lambda choice affects whether 
+      - must scale variables and test multiple tau, lambda options
+  - Ridge Regression
+    - Constrain only sum of squared coefs
+    - Doesn't do variable selection, but helps lead to better predictive models
+- Which variable selection method to choose
+  - Forward/backward/stepwise are often quick for initial look, but don't perform as well on new data
+    - Stepwise is probably the most common
+  - LASSO / elastic net: slower to compute, but better predictive models
+    - In general, choose these 
+  - Elastic net: a combo of lasso regression and ridge regression
+    - LASSO forces some coefficients to 0 to simplify the model
+    - Ridge shrinks coefficients towards 0 to reduce variance in the estimates
+      - Adds some bias, but reduces variance
+    - Prediction error is a function of both bias and variance, so finding a middle ground on both is best approach
+    
+    
