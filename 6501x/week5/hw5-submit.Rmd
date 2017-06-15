@@ -56,37 +56,67 @@ while (T) {
     expanding_dataset <- cbind(expanding_dataset, crime_predictor_pool[, best_column])
     crime_predictor_pool <- crime_predictor_pool[, -best_column]
   } else break
+  
+  # Check whether to drop any vars, drop if they're too big
+  # they're not added back to predictor pool
+  latest_model <- tidy(summary(lm(Crime ~ ., data = expanding_dataset)))
+  
+  drop_vars <- latest_model$term[latest_model$p.value > 0.15]
+  
+  expanding_dataset <- expanding_dataset[, !names(expanding_dataset) %in% drop_vars]
 }
 
 almost_model <- lm(Crime ~ ., data = expanding_dataset)
 summary(almost_model)
 
 ```
-After iteratively adding the most significant variable at each step (until no more with p < 0.15 were left to be added), I check the final model. All of the variables in it are significant at p < 0.05, so I don't have to remove any.
+After iteratively adding the most significant variable at each step (until no more with p < 0.15 were left to be added), I check the final model. All of the variables in it are significant at p < 0.05, so I don't to remove any.
 
 ## LASSO
 
 ```{r}
-
+model <- glmnet(x = as.matrix(crime[, 1:15]), y = as.matrix(crime[, 16]), family = 'gaussian', alpha = 1)
+plot(model, label = T)
 
 ```
+Ovserving the coefficients chosen under different lambda (tau) restrictions, variable 4, or Po1, is always chosen as important. Similarly, variable 13, or Inequality, frequently has a fair amount of weight applied as well. When the restriction is very weak, most of the variables are included in the model. However, this makes the model susceptible to over-fitting and weaker predictive power, so cross-validation can be used to determine the most effective L1 value.
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+cv.model <- cv.glmnet(x = as.matrix(crime[, 1:15]), y = as.matrix(crime[, 16]), family = 'gaussian', alpha = 1)
+plot(cv.model)
+coef(cv.model, s = 'lambda.min')
+coef(cv.model, s = 'lambda.1se')
 ```
+The first vertical line indicates the point at which mean cross-validated error is at a minimum. The second vertical line is the simplest model that is within one standard error of the minimum. The latter model shows that Po1, M.F, M, and Prob are all key variables in predicting crime rates. If we are OK with adding more variables, then we would bring in everything except Po2, LF, and Time.
 
-## Including Plots
+## Elastic Net
+To determine both optimal alpha and lambda values, I'll use cross validation.
+```{r}
+folds <- sample(1:5, size = nrow(crime), replace = T)
 
-You can also embed plots, for example:
+cv_fn <- function(alpha_param) {
+  model <- cv.glmnet(x = as.matrix(crime[, 1:15]), y = as.matrix(crime[, 16]), 
+                 family = 'gaussian', alpha = alpha_param)
+  
+  model_info <- data.frame('LL' = log(model$lambda),
+                           'mse' = model$cvm,
+                           'alpha_val' = alpha_param)
+  return(model_info)
+}
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+graph_data <- data.frame()
+for (alpha_param in seq(0.1, .95, 0.05)) {
+  graph_data <- bind_rows(graph_data, cv_fn(alpha_param))
+}
+ggplot(data = graph_data) +
+  geom_line(aes(x = LL, y = mse, color = factor(alpha_val)))
+
+graph_data[graph_data$mse == min(graph_data$mse), ]
 ```
+Comparing across values of alpha, the best response was an alpha of 0.75. To get a closer look:
+```{r}
+model.75 <- cv.glmnet(x = as.matrix(crime[, 1:15]), y = as.matrix(crime[, 16]), 
+                 family = 'gaussian', alpha = 0.75)
+plot(model.75)
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```
