@@ -19,7 +19,7 @@ if (Sys.info()[[1]] == "Windows") {
 }
 
 pacman::p_load(dplyr, tidyr, magrittr, readr, purrr, stats, outliers, 
-               lubridate, ggplot2, glmnet, FrF2, tibble)
+               lubridate, ggplot2, glmnet, FrF2, tibble, broom)
 set.seed(42)
 ```
 
