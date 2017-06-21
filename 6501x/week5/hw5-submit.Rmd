@@ -33,19 +33,24 @@ crime <- read_tsv('uscrime.txt')
 crime <- as_tibble(scale(crime))
 
 
-
+# Start with just the response variable
 expanding_dataset <- crime %>% select(Crime)
 
-
+# pool of predictor variables to check
 crime_predictor_pool <- crime[, 1:15]
 
+# run until no viable predictors are left
 while (T) {
+  # initialize empty tracking table
   tracking_table <- data.frame()
+  # check each variable in the pool
+  # on the first loop, will be the only regressor. In later steps, it will be added
+  # to previously selected variables
   for (i in 1:ncol(crime_predictor_pool)) {
     crime_model_data <- cbind(expanding_dataset, crime_predictor_pool[, i])
   
     model <- lm(Crime ~ ., data = crime_model_data)
-  
+    # Check the variable's p value. If it's low enough, add it to the tracking table
     current_p <- coef(summary(model))[length(coef(summary(model)))]
     
     if (current_p < 0.15) {
@@ -53,13 +58,18 @@ while (T) {
     }
   }
   
+  # If there were any variables that had p < 0.15, add the BEST one to the 
+  # list of variables to include
   if (nrow(tracking_table) >= 1) {
     best_column = tracking_table$i[tracking_table$current_p == min(tracking_table$current_p)]
+    # add the best variable
     expanding_dataset <- cbind(expanding_dataset, crime_predictor_pool[, best_column])
+    # drop it from the list of variables to check next round
     crime_predictor_pool <- crime_predictor_pool[, -best_column]
+    # if no variables were good enough, then exit the loop
   } else break
   
-  # Check whether to drop any vars, drop if they're too big
+  # Check whether to drop any vars, drop if they're too big now
   # they're not added back to predictor pool
   latest_model <- tidy(summary(lm(Crime ~ ., data = expanding_dataset)))
   
