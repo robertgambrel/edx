@@ -56,5 +56,32 @@
   - Run many times to get distribution of outcomes
 - Once you simulate, need to validate against real data to make sure it's a reasonable approximation
 
+# Prescriptive Simulation
+- Once you set up a good model, can use it to answer 'what-if' questions
+- Some software may  have a built-in heuristic to optimize the modules
+- To minimize random variation, use the same RNG sequence for both scenarios
+- Caveats:
+  - Only as good as the quality of input
+  - If you have missing or incorrect info, can get wrong answers
 
+# Markov Chains
+- Based on states of a system
+- For each state i of the model:
+  - p_ij is the transition probability from state i to state j
+  - P = {p_ij} is the transition matrix - probability of switching to each other state from each state
+- What is long-run probability of rainy days?
+  - given pi = {...} (a set of probabilities for first observation):
+    - multiply by P over and over
+  - steady state: the vector pi such that pi * P = pi
+- steady state isn't guaranteed:
+  - might have cyclic behavior
+  - Every state must be reachable from all others
+- Are memoryless:
+  - only thing that matters is the current state
+  - Most systems do not exhibit this property
+- Could work for webpage ranking:
+  - See what pages link to each other, follow the links around, see page visit frequency in steady state
+- Relatively rare due to the memoryless assumption, but very powerful where they can fit
+  
+  
 
