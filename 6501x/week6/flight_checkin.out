@@ -1,0 +1,84 @@
+
+----------------------------------------------------------------------
+17114:CCREAT
+Entity: 150
+A runtime error was detected at time 0.5167086 at the following block:
+
+ *    1 3$              CREATE,1,MinutesToBaseTime(0.0),ent Passenger:
+                            MinutesToBaseTime(EXPO(0.2)):
+                            NEXT(4$);
+
+Maximum of 150 entities exceeded.
+Possible causes:
+- A logic problem in your model is creating too many entities or not
+  disposing them. The run controller may be helpful in finding the problem.
+- You are in demo mode and have exceeded the entity limit. The commercial
+  version is required to run large models.
+- You have set an entity limit on the DISCRETE element that is too small.
+  Remove the limit or set it to a larger number.
+- You have exceeded the standard array s 
+pace for models. Use the Array Sizes
+  page in the Run/Setup dialog to increase the RSET space allocated and
+  recheck your model.
+----------------------------------------------------------------------
+
+
+SIMAN Run Controller.
+
+0.5167086 Hours>
+                                      ARENA Simulation Results
+                                   Windows User - License: STUDENT
+
+                                  Summary for Replication 1 of 1
+
+Project: Unnamed Project                                             Run execution date : 6/24/2017
+Analyst: Windows User                                                Model revision date: 6/24/2017
+
+Replication ended at time      : 1.0 Hours 
+Base Time Units: Hours
+
+                                           TALLY VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Observations
+___________________________________________________________________________________________________
+
+ent Passenger.VATime                        .07368     (Insuf)    .00233     .26567         12    
+ent Passenger.NVATime                       .00000     (Insuf)    .00000     .00000         12    
+ent Passenger.WaitTime                      .64371     (Insuf)    .51548     .87209         12    
+ent Passenger.TranTime                      .00000     (Insuf)    .00000     .00000         12    
+ent Passenger.OtherTime                     .00000     (Insuf)    .00000     .00000         12    
+ent Passenger.TotalTime                     .71739     (Insuf)    .57947     .91722         12    
+Ticket Checkin.Queue.WaitingTime            .00633     (Insuf)    .00000     .08021        149    
+Security Check.Queue.WaitingTime            .00000     (Insuf)    .00000     .00000         85    
+
+                                     DISCRETE-CHANGE VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Final Value
+___________________________________________________________________________________________________
+
+ent Passenger.WIP                           106.01     (Insuf)    .00000     148.00     136.00    
+r Checking Agents.NumberBusy                68.927     (Insuf)    .00000     100.00     64.000    
+r Checking Agents.NumberScheduled           100.00     (Insuf)    100.00     100.00     100.00    
+r Checking Agents.Utilization               .68928     (Insuf)    .00000     1.0000     .64000    
+r Security Check.NumberBusy                 36.623     (Insuf)    .00000     75.000     73.000    
+r Security Check.NumberScheduled            100.00     (Insuf)    100.00     100.00     100.00    
+r Security Check.Utilization                .36624     (Insuf)    .00000     .75000     .73000    
+Ticket Checkin.Queue.NumberInQueue          .94308     (Insuf)    .00000     14.000     .00000    
+Security Check.Queue.NumberInQueue          .00000     (Insuf)    .00000     .00000     .00000    
+
+                                             OUTPUTS
+
+Identifier                                   Value
+_____________________________________________________________
+
+ent Passenger.NumberIn                      148.00    
+ent Passenger.NumberOut                     12.000    
+r Checking Agents.NumberSeized              149.00    
+r Checking Agents.ScheduledUtilization      .68928    
+r Security Check.NumberSeized               85.000    
+r Security Check.ScheduledUtilization       .36624    
+System.NumberOut                            12.000    
+
+
+Simulation run time: 0.30 minutes.
+Simulation run completed with 1 error(s) and 0 warning(s).

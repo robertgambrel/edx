@@ -1,0 +1,10 @@
+[RESOURCES]
+r Checking Agents
+r Security Check
+[VARIABLES]
+Passenger Arrival.NumberOut
+Ticket Checkin.NumberOut
+Ticket Checkin.NumberIn
+Security Check.NumberOut
+Security Check.NumberIn
+Dispose 1.NumberOut
