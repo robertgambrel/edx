@@ -8,20 +8,20 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-if (Sys.info()[[1]] == "Windows") {
+if (Sys.info()[[1]] == "Windows" & Sys.info()['user'] == 'gambrel') {
   setwd("E:/GoogleDrive/edx/6501x/week6")
-} else if (Sys.info()[[1]] == "Darwin") {
-  setwd("/Users/healthpolicyanalyst/Documents/Box Sync/Personal/edx/6501x/week6")
+} else if (Sys.info()['user'] == "robert.gambrel") {
+  setwd("C:/Users/robert.gambrel/Documents/edx")
 } else if (Sys.info()[[1]] == "Linux") {
   setwd("~/Documents/edx/6501x/week6")
 }
 
 ```
 
-```{r}
+```{r} 
 
 pacman::p_load(dplyr, tidyr, magrittr, readr, purrr, stats, outliers, 
-               lubridate, ggplot2, glmnet, FrF2, tibble, broom)
+               lubridate, ggplot2, glmnet, FrF2, tibble, broom, mice)
 set.seed(42)
 ```
 
@@ -31,48 +31,65 @@ I tried multiple configurations of the passenger check-in process to minimize re
 
 ![Arena Simulation Design](simulation_flow.png)
 # Q2
-
-Internet articles are frequently using titles and headlines that are sensationalized or evocative in order to drive traffic. These 'clickbait' articles serve to increase page views and provide ad revenue to their publishers. Since the articles frequently show up in ad spaces from other websites, the publisher might try out multiple versions of the headline shown in the ad in order to see how well each one performs. Since each user click provids the publisher revenue, a milti-armed bandit approach would likely be favorable to a simpler A/B testing routine.
-
-# Q3
-
 ```{r}
-houses <- FrF2(nruns = 16, nfactors = 10)
-houses
-```
-The matrix above lists the necessary combinations of features to best balance the data collected on individual factors' effects, as well as their effects when combined with other features. Potential buyers' reactions (something like a 0-100 rating of the house or even a simple 'would buy' vs. 'would not buy' response) can then be used to run a regression and determine which features are the biggest drivers of buyer interest.
+cancer <- read_csv('breast-cancer-wisconsin.data.txt', na = '?',
+                   col_types = c('idddddddddi'),
+                   col_names =  c('sample_id', 'clump_thickness', 'cell_size_uniformity',
+                   'cell_shape_uniformity', 'marginal_adhesion', 'epithelial_cell_size',
+                   'bare_nuclei', 'bland_chromatin', 'normal_nucleoli', 'mitoses', 'class'))
 
-# Q4
+names(cancer) <- c('sample_id', 'clump_thickness', 'cell_size_uniformity',
+                   'cell_shape_uniformity', 'marginal_adhesion', 'epithelial_cell_size',
+                   'bare_nuclei', 'bland_chromatin', 'normal_nucleoli', 'mitoses', 'class')
 
-## Binomial
+cancer$malignant <- ifelse(cancer$class == 4, 1, 0)
 
-We might consider basketball free throw attempts a binomial data generating process. Though crowd noise, game importance, and stress levels of a given shot due to a close game can fluctuate within and across games, a shooter takes every shot from the same distance and using the same target. Skilled shooters may have p = 0.9, while weak shooters may be lower than 0.4.
+cancer$class <- NULL
 
-## Geometric
+sum(complete.cases(cancer))
+summary(cancer)
 
-The success of a brute-force password cracking machine likely follows a geometric distribution. For example, if a pin number is 3 digits that range from 0-9 each, there are 10,000 possible combinations. The probability of randomly guessing correctly is then p = 0.001. If a cracking tool starts trying random passwords without repeating guesses, then the probability that it takes N failures before success is 0.001 * 0.999^N.
-
-```{r}
-data <- data.frame(n = 1:10000)
-data %<>%
-  mutate(
-    p = 0.001 * 0.999**n
-  )
-
-ggplot(data = data) +
-  geom_line(aes(x = n, y = p))
-
-sum(data$p)
 ```
 
-## Poisson
+I first do mean imputation. Since each predictor column is continuous, I do not need to worry about modal imputation. Even though `bare_nuclei` is the only column with missing values, my function will check every column except the `sample_id` variable and the `malignant` outcome variable.
 
-When weekly homework assignments are made available, then the submission rate of student answers likely follow a poisson distribution. The average hourly submission rate over a 96 hour period is likely pretty low. There are probably low counts of submissions right after the homework is released, and higher counts towards the deadline. Overall, I would expect a high count of hours with 0 or 1 submissions and far fewer periods with 10+ submissions. This count model would follow a Poisson distribution.
+```{r}
+# duplicate dataset, which will be updated with mean values where missing
+mean_imputed <- cancer
 
-## Exponential
+na.assign <- function(col, val) {
+  col[is.na(col)] <- val
+  return(col)
+}
 
-Our daycare opens at 6:30 AM. They must plan ahead to make sure that they are adequately staffed to meet child-caretaker ratio requirements. The inter-arrival time of children should follow an exponential distribution.
+for (var in names(mean_imputed)[2:10]) {
+  # column mean of non-missing data
+  mean_val = mean(mean_imputed[[var]], na.rm = T)
+  
+  # update if missing
+  mean_imputed[, var] <- na.assign(mean_imputed[,var], mean_val)
+  
+}
+sum(complete.cases(mean_imputed))
+summary(mean_imputed)
+```
+There are no entries of `bare_nuclei` that are missing now. The mean stays the same, which we woul dexpect after mean imputation.
 
-## Weibull
+I next use the `mice` package to do regression imputation. First, I use the predicted value with no error.
 
-I had to replace my last cell phone after the battery eventually stopped holding a charge. The length of time before failure for the battery type used in my phone might follow a Weibull distribution with a k > 1 shape parameter. Like most electronics, batteries degrade over time. The likelihood of a battery losing capacity in the first couple months is low, but as it is cycled over and over, heated and cooled, and exposed to moisture the likelihood that it gives up and breaks increases.
+```{r}
+predicted_imputation <- mice(cancer, m = 1, method = 'norm.predict')
+predicted_imputation_values <- complete(predicted_imputation)
+summary(predicted_imputation_values)
+sd(predicted_imputation_values$bare_nuclei)
+```
+
+Next, I allow for some prediction error around the imputed value, based on the model's standard error.
+
+```{r}
+predicted_imputation_w_err <- mice(cancer, m = 1, method = 'norm.nob')
+predicted_imputation_w_err_values <- complete(predicted_imputation_w_err)
+summary(predicted_imputation_w_err_values)
+sd(predicted_imputation_w_err_values$bare_nuclei)
+
+```
