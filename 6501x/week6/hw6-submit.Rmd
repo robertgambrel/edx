@@ -1,0 +1,78 @@
+---
+title: "Homework 6"
+author: "Robert Gambrel"
+date: "June 28, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+if (Sys.info()[[1]] == "Windows") {
+  setwd("E:/GoogleDrive/edx/6501x/week6")
+} else if (Sys.info()[[1]] == "Darwin") {
+  setwd("/Users/healthpolicyanalyst/Documents/Box Sync/Personal/edx/6501x/week6")
+} else if (Sys.info()[[1]] == "Linux") {
+  setwd("~/Documents/edx/6501x/week6")
+}
+
+```
+
+```{r}
+
+pacman::p_load(dplyr, tidyr, magrittr, readr, purrr, stats, outliers, 
+               lubridate, ggplot2, glmnet, FrF2, tibble, broom)
+set.seed(42)
+```
+
+# Q1
+
+I tried multiple configurations of the passenger check-in process to minimize resources. The first bottleneck was the ticketing gate checkin. If I included less than 4 agents here, the process had a mean throughput time of 19 minutes, even with maximum security gates allowed. I next iteratively reduced the security capacity - the image below shows the point at which security was insufficient to meet the demands of the assignment. I started with 6 security gates and removed them one at a time to find the minimum necessary to keep wait times low. Under the 3-queue system below, mean throughput time in this model was 22 minutes. Under the conditions we chose in the model, I therefore needed 4 ticketing agents and 4 security lines to consistently achieve a mean passenger wait time of 15 minutes or less.
+
+![Arena Simulation Design](simulation_flow.png)
+# Q2
+
+Internet articles are frequently using titles and headlines that are sensationalized or evocative in order to drive traffic. These 'clickbait' articles serve to increase page views and provide ad revenue to their publishers. Since the articles frequently show up in ad spaces from other websites, the publisher might try out multiple versions of the headline shown in the ad in order to see how well each one performs. Since each user click provids the publisher revenue, a milti-armed bandit approach would likely be favorable to a simpler A/B testing routine.
+
+# Q3
+
+```{r}
+houses <- FrF2(nruns = 16, nfactors = 10)
+houses
+```
+The matrix above lists the necessary combinations of features to best balance the data collected on individual factors' effects, as well as their effects when combined with other features. Potential buyers' reactions (something like a 0-100 rating of the house or even a simple 'would buy' vs. 'would not buy' response) can then be used to run a regression and determine which features are the biggest drivers of buyer interest.
+
+# Q4
+
+## Binomial
+
+We might consider basketball free throw attempts a binomial data generating process. Though crowd noise, game importance, and stress levels of a given shot due to a close game can fluctuate within and across games, a shooter takes every shot from the same distance and using the same target. Skilled shooters may have p = 0.9, while weak shooters may be lower than 0.4.
+
+## Geometric
+
+The success of a brute-force password cracking machine likely follows a geometric distribution. For example, if a pin number is 3 digits that range from 0-9 each, there are 10,000 possible combinations. The probability of randomly guessing correctly is then p = 0.001. If a cracking tool starts trying random passwords without repeating guesses, then the probability that it takes N failures before success is 0.001 * 0.999^N.
+
+```{r}
+data <- data.frame(n = 1:10000)
+data %<>%
+  mutate(
+    p = 0.001 * 0.999**n
+  )
+
+ggplot(data = data) +
+  geom_line(aes(x = n, y = p))
+
+sum(data$p)
+```
+
+## Poisson
+
+When weekly homework assignments are made available, then the submission rate of student answers likely follow a poisson distribution. The average hourly submission rate over a 96 hour period is likely pretty low. There are probably low counts of submissions right after the homework is released, and higher counts towards the deadline. Overall, I would expect a high count of hours with 0 or 1 submissions and far fewer periods with 10+ submissions. This count model would follow a Poisson distribution.
+
+## Exponential
+
+Our daycare opens at 6:30 AM. They must plan ahead to make sure that they are adequately staffed to meet child-caretaker ratio requirements. The inter-arrival time of children should follow an exponential distribution.
+
+## Weibull
+
+I had to replace my last cell phone after the battery eventually stopped holding a charge. The length of time before failure for the battery type used in my phone might follow a Weibull distribution with a k > 1 shape parameter. Like most electronics, batteries degrade over time. The likelihood of a battery losing capacity in the first couple months is low, but as it is cycled over and over, heated and cooled, and exposed to moisture the likelihood that it gives up and breaks increases.
