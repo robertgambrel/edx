@@ -1,10 +1,25 @@
 [RESOURCES]
 r Checking Agents
-r Security Check
+r Security Check 6
+r Security Check 5
+r Security Check 4
+r Security Check 3
+r Security Check 2
+r Security Check 1
 [VARIABLES]
+Security Check 5.NumberIn
+Security Check 5.NumberOut
 Passenger Arrival.NumberOut
 Ticket Checkin.NumberOut
 Ticket Checkin.NumberIn
+Security Check 3.NumberOut
+Security Check 3.NumberIn
+Security Check 2.NumberOut
+Security Check 2.NumberIn
 Security Check.NumberOut
 Security Check.NumberIn
+Security Check 6.NumberIn
+Security Check 6.NumberOut
 Dispose 1.NumberOut
+Security Check 4.NumberIn
+Security Check 4.NumberOut

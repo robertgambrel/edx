@@ -9,5 +9,5 @@ MaxScanRows=8
 MaxBufferSize=2048
 FIL=MS Access
 DriverId=281
-DefaultDir=C:\Users\Gambrel\AppData\Roaming\Rockwell Software\Arena
+DefaultDir=e:\GoogleDrive\edx\6501x\week6
 DBQ=E:\GoogleDrive\edx\6501x\week6\flight_checkin.accdb

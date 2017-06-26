@@ -1,12 +1,13 @@
+SIMAN Run Controller.
 
+0.56666667 Hours>
 ----------------------------------------------------------------------
 17114:CCREAT
-Entity: 150
-A runtime error was detected at time 0.5167086 at the following block:
+A runtime error was detected at time 2.6666667 at the following block:
 
- *    1 3$              CREATE,1,MinutesToBaseTime(0.0),ent Passenger:
-                            MinutesToBaseTime(EXPO(0.2)):
-                            NEXT(4$);
+ *    1 9$              CREATE,1,MinutesToBaseTime(0.0),ent Passenger:
+                            MinutesToBaseTime(POIS(.2)):
+                            NEXT(10$);
 
 Maximum of 150 entities exceeded.
 Possible causes:
@@ -25,16 +26,16 @@ pace for models. Use the Array Sizes
 
 SIMAN Run Controller.
 
-0.5167086 Hours>
+2.6666667 Hours>
                                       ARENA Simulation Results
                                    Windows User - License: STUDENT
 
-                                  Summary for Replication 1 of 1
+                                  Summary for Replication 1 of 10
 
-Project: Unnamed Project                                             Run execution date : 6/24/2017
-Analyst: Windows User                                                Model revision date: 6/24/2017
+Project: Unnamed Project                                             Run execution date : 6/25/2017
+Analyst: Windows User                                                Model revision date: 6/25/2017
 
-Replication ended at time      : 1.0 Hours 
+Replication ended at time      : 5.0 Hours 
 Base Time Units: Hours
 
                                            TALLY VARIABLES
@@ -42,43 +43,1154 @@ Base Time Units: Hours
 Identifier                                  Average   Half Width  Minimum    Maximum   Observations
 ___________________________________________________________________________________________________
 
-ent Passenger.VATime                        .07368     (Insuf)    .00233     .26567         12    
-ent Passenger.NVATime                       .00000     (Insuf)    .00000     .00000         12    
-ent Passenger.WaitTime                      .64371     (Insuf)    .51548     .87209         12    
-ent Passenger.TranTime                      .00000     (Insuf)    .00000     .00000         12    
-ent Passenger.OtherTime                     .00000     (Insuf)    .00000     .00000         12    
-ent Passenger.TotalTime                     .71739     (Insuf)    .57947     .91722         12    
-Ticket Checkin.Queue.WaitingTime            .00633     (Insuf)    .00000     .08021        149    
-Security Check.Queue.WaitingTime            .00000     (Insuf)    .00000     .00000         85    
+ent Passenger.VATime                        .02419     8.1993E-04 .00893     .09432        762    
+ent Passenger.NVATime                       .00000     .00000     .00000     .00000        762    
+ent Passenger.WaitTime                      .26023     (Corr)     .00000     .59548        762    
+ent Passenger.TranTime                      .00000     .00000     .00000     .00000        762    
+ent Passenger.OtherTime                     .00000     .00000     .00000     .00000        762    
+ent Passenger.TotalTime                     .28443     (Corr)     .00922     .62363        762    
+Security Check 3.Queue.WaitingTime          .23852     (Insuf)    .00000     .48487        247    
+Ticket Checkin.Queue.WaitingTime            .02721     (Corr)     .00000     .11090        763    
+Security Check 6.Queue.WaitingTime              --         --         --         --          0
+Security Check 4.Queue.WaitingTime              --         --         --         --          0
+Security Check 5.Queue.WaitingTime              --         --         --         --          0
+Security Check 2.Queue.WaitingTime          .23307     (Insuf)    .00000     .48134        255    
+Security Check.Queue.WaitingTime            .22899     (Insuf)    .00000     .46878        261    
 
                                      DISCRETE-CHANGE VARIABLES
 
 Identifier                                  Average   Half Width  Minimum    Maximum   Final Value
 ___________________________________________________________________________________________________
 
-ent Passenger.WIP                           106.01     (Insuf)    .00000     148.00     136.00    
-r Checking Agents.NumberBusy                68.927     (Insuf)    .00000     100.00     64.000    
-r Checking Agents.NumberScheduled           100.00     (Insuf)    100.00     100.00     100.00    
-r Checking Agents.Utilization               .68928     (Insuf)    .00000     1.0000     .64000    
-r Security Check.NumberBusy                 36.623     (Insuf)    .00000     75.000     73.000    
-r Security Check.NumberScheduled            100.00     (Insuf)    100.00     100.00     100.00    
-r Security Check.Utilization                .36624     (Insuf)    .00000     .75000     .73000    
-Ticket Checkin.Queue.NumberInQueue          .94308     (Insuf)    .00000     14.000     .00000    
-Security Check.Queue.NumberInQueue          .00000     (Insuf)    .00000     .00000     .00000    
+ent Passenger.WIP                           43.346     (Corr)     .00000     148.00     .00000    
+r Checking Agents.NumberBusy                1.7838     (Insuf)    .00000     4.0000     .00000    
+r Checking Agents.NumberScheduled           4.0000     (Insuf)    4.0000     4.0000     4.0000    
+r Checking Agents.Utilization               .44597     (Insuf)    .00000     1.0000     .00000    
+r Security Check 6.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 6.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 6.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 5.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 4.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 3.NumberBusy               .61917     (Insuf)    .00000     1.0000     .00000    
+r Security Check 3.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 3.Utilization              .61917     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberBusy               .63911     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 2.Utilization              .63911     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberBusy               .64772     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 1.Utilization              .64772     (Insuf)    .00000     1.0000     .00000    
+Security Check 3.Queue.NumberInQueue        11.782     (Corr)     .00000     38.000     .00000    
+Ticket Checkin.Queue.NumberInQueue          4.1526     3.0370     .00000     42.000     .00000    
+Security Check 6.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 4.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 5.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 2.Queue.NumberInQueue        11.886     (Corr)     .00000     38.000     .00000    
+Security Check.Queue.NumberInQueue          11.953     (Corr)     .00000     39.000     .00000    
 
                                              OUTPUTS
 
 Identifier                                   Value
 _____________________________________________________________
 
-ent Passenger.NumberIn                      148.00    
-ent Passenger.NumberOut                     12.000    
-r Checking Agents.NumberSeized              149.00    
-r Checking Agents.ScheduledUtilization      .68928    
-r Security Check.NumberSeized               85.000    
-r Security Check.ScheduledUtilization       .36624    
-System.NumberOut                            12.000    
+ent Passenger.NumberIn                      762.00    
+ent Passenger.NumberOut                     762.00    
+r Checking Agents.NumberSeized              763.00    
+r Checking Agents.ScheduledUtilization      .44597    
+r Security Check 6.NumberSeized             .00000    
+r Security Check 6.ScheduledUtilization     .00000    
+r Security Check 5.NumberSeized             .00000    
+r Security Check 5.ScheduledUtilization     .00000    
+r Security Check 4.NumberSeized             .00000    
+r Security Check 4.ScheduledUtilization     .00000    
+r Security Check 3.NumberSeized             247.00    
+r Security Check 3.ScheduledUtilization     .61917    
+r Security Check 2.NumberSeized             255.00    
+r Security Check 2.ScheduledUtilization     .63911    
+r Security Check 1.NumberSeized             261.00    
+r Security Check 1.ScheduledUtilization     .64772    
+System.NumberOut                            763.00    
+
+Beginning replication 2 of 10
+
+----------------------------------------------------------------------
+17114:CCREAT
+A runtime error was detected at time 3.9333333 at the following block:
+
+ *    1 9$              CREATE,1,MinutesToBaseTime(0.0),ent Passenger:
+                            MinutesToBaseTime(POIS(.2)):
+                            NEXT(10$);
+
+Maximum of 150 entities exceeded.
+Possible causes:
+- A logic problem in your model is creating too many entities or not
+  disposing them. The run controller may be helpful in finding the problem.
+- You are in demo mode and have exceeded the entity limit. The commercial
+  version is required to run large models.
+- You have set an entity limit on the DISCRETE element that is too small.
+  Remove the limit or set it to a larger number.
+- You have exceeded the standard array s 
+pace for models. Use the Array Sizes
+  page in the Run/Setup dialog to increase the RSET space allocated and
+  recheck your model.
+----------------------------------------------------------------------
 
 
-Simulation run time: 0.30 minutes.
-Simulation run completed with 1 error(s) and 0 warning(s).
+SIMAN Run Controller.
+
+3.9333333 Hours>
+                                      ARENA Simulation Results
+                                   Windows User - License: STUDENT
+
+                                  Summary for Replication 2 of 10
+
+Project: Unnamed Project                                             Run execution date : 6/25/2017
+Analyst: Windows User                                                Model revision date: 6/25/2017
+
+Replication ended at time      : 5.0 Hours 
+Base Time Units: Hours
+
+                                           TALLY VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Observations
+___________________________________________________________________________________________________
+
+ent Passenger.VATime                        .02468     8.0058E-04 .00867     .12066       1079    
+ent Passenger.NVATime                       .00000     .00000     .00000     .00000       1079    
+ent Passenger.WaitTime                      .38376     (Corr)     .00000     .59873       1079    
+ent Passenger.TranTime                      .00000     .00000     .00000     .00000       1079    
+ent Passenger.OtherTime                     .00000     .00000     .00000     .00000       1079    
+ent Passenger.TotalTime                     .40844     (Corr)     .01756     .64305       1079    
+Security Check 3.Queue.WaitingTime          .35635     (Corr)     .00000     .55556        358    
+Ticket Checkin.Queue.WaitingTime            .02528     (Corr)     .00000     .10722       1080    
+Security Check 6.Queue.WaitingTime              --         --         --         --          0
+Security Check 4.Queue.WaitingTime              --         --         --         --          0
+Security Check 5.Queue.WaitingTime              --         --         --         --          0
+Security Check 2.Queue.WaitingTime          .36020     (Corr)     .00000     .58053        359    
+Security Check.Queue.WaitingTime            .35939     (Corr)     .00000     .57224        363    
+
+                                     DISCRETE-CHANGE VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Final Value
+___________________________________________________________________________________________________
+
+ent Passenger.WIP                           88.141     (Corr)     .00000     148.00     .00000    
+r Checking Agents.NumberBusy                2.6164     (Insuf)    .00000     4.0000     .00000    
+r Checking Agents.NumberScheduled           4.0000     (Insuf)    4.0000     4.0000     4.0000    
+r Checking Agents.Utilization               .65411     (Insuf)    .00000     1.0000     .00000    
+r Security Check 6.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 6.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 6.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 5.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 4.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 3.NumberBusy               .89737     (Insuf)    .00000     1.0000     .00000    
+r Security Check 3.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 3.Utilization              .89737     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberBusy               .90885     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 2.Utilization              .90885     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberBusy               .90695     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 1.Utilization              .90695     (Insuf)    .00000     1.0000     .00000    
+Security Check 3.Queue.NumberInQueue        25.514     (Corr)     .00000     45.000     .00000    
+Ticket Checkin.Queue.NumberInQueue          5.4612     (Corr)     .00000     36.000     .00000    
+Security Check 6.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 4.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 5.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 2.Queue.NumberInQueue        25.862     (Corr)     .00000     46.000     .00000    
+Security Check.Queue.NumberInQueue          26.091     (Corr)     .00000     46.000     .00000    
+
+                                             OUTPUTS
+
+Identifier                                   Value
+_____________________________________________________________
+
+ent Passenger.NumberIn                      1079.0    
+ent Passenger.NumberOut                     1079.0    
+r Checking Agents.NumberSeized              1080.0    
+r Checking Agents.ScheduledUtilization      .65411    
+r Security Check 6.NumberSeized             .00000    
+r Security Check 6.ScheduledUtilization     .00000    
+r Security Check 5.NumberSeized             .00000    
+r Security Check 5.ScheduledUtilization     .00000    
+r Security Check 4.NumberSeized             .00000    
+r Security Check 4.ScheduledUtilization     .00000    
+r Security Check 3.NumberSeized             358.00    
+r Security Check 3.ScheduledUtilization     .89737    
+r Security Check 2.NumberSeized             359.00    
+r Security Check 2.ScheduledUtilization     .90885    
+r Security Check 1.NumberSeized             363.00    
+r Security Check 1.ScheduledUtilization     .90695    
+System.NumberOut                            1080.0    
+
+Beginning replication 3 of 10
+
+----------------------------------------------------------------------
+17114:CCREAT
+A runtime error was detected at time 1.0666667 at the following block:
+
+ *    1 9$              CREATE,1,MinutesToBaseTime(0.0),ent Passenger:
+                            MinutesToBaseTime(POIS(.2)):
+                            NEXT(10$);
+
+Maximum of 150 entities exceeded.
+Possible causes:
+- A logic problem in your model is creating too many entities or not
+  disposing them. The run controller may be helpful in finding the problem.
+- You are in demo mode and have exceeded the entity limit. The commercial
+  version is required to run large models.
+- You have set an entity limit on the DISCRETE element that is too small.
+  Remove the limit or set it to a larger number.
+- You have exceeded the standard array s 
+pace for models. Use the Array Sizes
+  page in the Run/Setup dialog to increase the RSET space allocated and
+  recheck your model.
+----------------------------------------------------------------------
+
+
+SIMAN Run Controller.
+
+1.0666667 Hours>
+                                      ARENA Simulation Results
+                                   Windows User - License: STUDENT
+
+                                  Summary for Replication 3 of 10
+
+Project: Unnamed Project                                             Run execution date : 6/25/2017
+Analyst: Windows User                                                Model revision date: 6/25/2017
+
+Replication ended at time      : 5.0 Hours 
+Base Time Units: Hours
+
+                                           TALLY VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Observations
+___________________________________________________________________________________________________
+
+ent Passenger.VATime                        .02545     .00136     .00862     .10131        399    
+ent Passenger.NVATime                       .00000     .00000     .00000     .00000        399    
+ent Passenger.WaitTime                      .29147     (Corr)     .00000     .59838        399    
+ent Passenger.TranTime                      .00000     .00000     .00000     .00000        399    
+ent Passenger.OtherTime                     .00000     .00000     .00000     .00000        399    
+ent Passenger.TotalTime                     .31692     (Corr)     .01267     .62489        399    
+Security Check 3.Queue.WaitingTime          .15194     (Insuf)    .00000     .32285        133    
+Ticket Checkin.Queue.WaitingTime            .13667     (Corr)     .00000     .25694        400    
+Security Check 6.Queue.WaitingTime              --         --         --         --          0
+Security Check 4.Queue.WaitingTime              --         --         --         --          0
+Security Check 5.Queue.WaitingTime              --         --         --         --          0
+Security Check 2.Queue.WaitingTime          .15604     (Insuf)    .00000     .34140        132    
+Security Check.Queue.WaitingTime            .15856     (Insuf)    .00000     .36468        135    
+
+                                     DISCRETE-CHANGE VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Final Value
+___________________________________________________________________________________________________
+
+ent Passenger.WIP                           25.289     (Corr)     .00000     148.00     .00000    
+r Checking Agents.NumberBusy                1.0360     (Insuf)    .00000     4.0000     .00000    
+r Checking Agents.NumberScheduled           4.0000     (Insuf)    4.0000     4.0000     4.0000    
+r Checking Agents.Utilization               .25900     (Insuf)    .00000     1.0000     .00000    
+r Security Check 6.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 6.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 6.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 5.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 4.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 3.NumberBusy               .32888     (Insuf)    .00000     1.0000     .00000    
+r Security Check 3.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 3.Utilization              .32888     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberBusy               .33299     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 2.Utilization              .33299     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberBusy               .33830     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 1.Utilization              .33830     (Insuf)    .00000     1.0000     .00000    
+Security Check 3.Queue.NumberInQueue        4.0416     (Insuf)    .00000     27.000     .00000    
+Ticket Checkin.Queue.NumberInQueue          10.933     (Corr)     .00000     80.000     .00000    
+Security Check 6.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 4.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 5.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 2.Queue.NumberInQueue        4.1195     (Insuf)    .00000     27.000     .00000    
+Security Check.Queue.NumberInQueue          4.2811     (Insuf)    .00000     27.000     .00000    
+
+                                             OUTPUTS
+
+Identifier                                   Value
+_____________________________________________________________
+
+ent Passenger.NumberIn                      399.00    
+ent Passenger.NumberOut                     399.00    
+r Checking Agents.NumberSeized              400.00    
+r Checking Agents.ScheduledUtilization      .25900    
+r Security Check 6.NumberSeized             .00000    
+r Security Check 6.ScheduledUtilization     .00000    
+r Security Check 5.NumberSeized             .00000    
+r Security Check 5.ScheduledUtilization     .00000    
+r Security Check 4.NumberSeized             .00000    
+r Security Check 4.ScheduledUtilization     .00000    
+r Security Check 3.NumberSeized             133.00    
+r Security Check 3.ScheduledUtilization     .32888    
+r Security Check 2.NumberSeized             132.00    
+r Security Check 2.ScheduledUtilization     .33299    
+r Security Check 1.NumberSeized             135.00    
+r Security Check 1.ScheduledUtilization     .33830    
+System.NumberOut                            400.00    
+
+Beginning replication 4 of 10
+
+----------------------------------------------------------------------
+17114:CCREAT
+A runtime error was detected at time 1.7166667 at the following block:
+
+ *    1 9$              CREATE,1,MinutesToBaseTime(0.0),ent Passenger:
+                            MinutesToBaseTime(POIS(.2)):
+                            NEXT(10$);
+
+Maximum of 150 entities exceeded.
+Possible causes:
+- A logic problem in your model is creating too many entities or not
+  disposing them. The run controller may be helpful in finding the problem.
+- You are in demo mode and have exceeded the entity limit. The commercial
+  version is required to run large models.
+- You have set an entity limit on the DISCRETE element that is too small.
+  Remove the limit or set it to a larger number.
+- You have exceeded the standard array s 
+pace for models. Use the Array Sizes
+  page in the Run/Setup dialog to increase the RSET space allocated and
+  recheck your model.
+----------------------------------------------------------------------
+
+
+SIMAN Run Controller.
+
+1.7166667 Hours>
+                                      ARENA Simulation Results
+                                   Windows User - License: STUDENT
+
+                                  Summary for Replication 4 of 10
+
+Project: Unnamed Project                                             Run execution date : 6/25/2017
+Analyst: Windows User                                                Model revision date: 6/25/2017
+
+Replication ended at time      : 5.0 Hours 
+Base Time Units: Hours
+
+                                           TALLY VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Observations
+___________________________________________________________________________________________________
+
+ent Passenger.VATime                        .02385     .00103     .00901     .12010        556    
+ent Passenger.NVATime                       .00000     .00000     .00000     .00000        556    
+ent Passenger.WaitTime                      .35622     (Corr)     .00000     .61112        556    
+ent Passenger.TranTime                      .00000     .00000     .00000     .00000        556    
+ent Passenger.OtherTime                     .00000     .00000     .00000     .00000        556    
+ent Passenger.TotalTime                     .38007     (Corr)     .03021     .69041        556    
+Security Check 3.Queue.WaitingTime          .30510     (Insuf)    .00000     .52822        184    
+Ticket Checkin.Queue.WaitingTime            .04644     (Corr)     .00000     .14525        557    
+Security Check 6.Queue.WaitingTime              --         --         --         --          0
+Security Check 4.Queue.WaitingTime              --         --         --         --          0
+Security Check 5.Queue.WaitingTime              --         --         --         --          0
+Security Check 2.Queue.WaitingTime          .30876     (Insuf)    .00000     .57099        189    
+Security Check.Queue.WaitingTime            .31690     (Insuf)    .00000     .55830        184    
+
+                                     DISCRETE-CHANGE VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Final Value
+___________________________________________________________________________________________________
+
+ent Passenger.WIP                           42.263     (Corr)     .00000     148.00     .00000    
+r Checking Agents.NumberBusy                1.2844     (Insuf)    .00000     4.0000     .00000    
+r Checking Agents.NumberScheduled           4.0000     (Insuf)    4.0000     4.0000     4.0000    
+r Checking Agents.Utilization               .32110     (Insuf)    .00000     1.0000     .00000    
+r Security Check 6.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 6.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 6.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 5.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 4.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 3.NumberBusy               .44988     (Insuf)    .00000     1.0000     .00000    
+r Security Check 3.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 3.Utilization              .44988     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberBusy               .46312     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 2.Utilization              .46312     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberBusy               .45886     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 1.Utilization              .45886     (Insuf)    .00000     1.0000     .00000    
+Security Check 3.Queue.NumberInQueue        11.227     (Corr)     .00000     44.000     .00000    
+Ticket Checkin.Queue.NumberInQueue          5.1735     (Corr)     .00000     59.000     .00000    
+Security Check 6.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 4.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 5.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 2.Queue.NumberInQueue        11.671     (Corr)     .00000     45.000     .00000    
+Security Check.Queue.NumberInQueue          11.661     (Corr)     .00000     45.000     .00000    
+
+                                             OUTPUTS
+
+Identifier                                   Value
+_____________________________________________________________
+
+ent Passenger.NumberIn                      556.00    
+ent Passenger.NumberOut                     556.00    
+r Checking Agents.NumberSeized              557.00    
+r Checking Agents.ScheduledUtilization      .32110    
+r Security Check 6.NumberSeized             .00000    
+r Security Check 6.ScheduledUtilization     .00000    
+r Security Check 5.NumberSeized             .00000    
+r Security Check 5.ScheduledUtilization     .00000    
+r Security Check 4.NumberSeized             .00000    
+r Security Check 4.ScheduledUtilization     .00000    
+r Security Check 3.NumberSeized             184.00    
+r Security Check 3.ScheduledUtilization     .44988    
+r Security Check 2.NumberSeized             189.00    
+r Security Check 2.ScheduledUtilization     .46312    
+r Security Check 1.NumberSeized             184.00    
+r Security Check 1.ScheduledUtilization     .45886    
+System.NumberOut                            557.00    
+
+Beginning replication 5 of 10
+
+----------------------------------------------------------------------
+17114:CCREAT
+A runtime error was detected at time 0.9 at the following block:
+
+ *    1 9$              CREATE,1,MinutesToBaseTime(0.0),ent Passenger:
+                            MinutesToBaseTime(POIS(.2)):
+                            NEXT(10$);
+
+Maximum of 150 entities exceeded.
+Possible causes:
+- A logic problem in your model is creating too many entities or not
+  disposing them. The run controller may be helpful in finding the problem.
+- You are in demo mode and have exceeded the entity limit. The commercial
+  version is required to run large models.
+- You have set an entity limit on the DISCRETE element that is too small.
+  Remove the limit or set it to a larger number.
+- You have exceeded the standard array s 
+pace for models. Use the Array Sizes
+  page in the Run/Setup dialog to increase the RSET space allocated and
+  recheck your model.
+----------------------------------------------------------------------
+
+
+SIMAN Run Controller.
+
+0.9 Hours>
+                                      ARENA Simulation Results
+                                   Windows User - License: STUDENT
+
+                                  Summary for Replication 5 of 10
+
+Project: Unnamed Project                                             Run execution date : 6/25/2017
+Analyst: Windows User                                                Model revision date: 6/25/2017
+
+Replication ended at time      : 5.0 Hours 
+Base Time Units: Hours
+
+                                           TALLY VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Observations
+___________________________________________________________________________________________________
+
+ent Passenger.VATime                        .02491     .00163     .00888     .10222        353    
+ent Passenger.NVATime                       .00000     .00000     .00000     .00000        353    
+ent Passenger.WaitTime                      .32396     (Corr)     .00000     .62243        353    
+ent Passenger.TranTime                      .00000     .00000     .00000     .00000        353    
+ent Passenger.OtherTime                     .00000     .00000     .00000     .00000        353    
+ent Passenger.TotalTime                     .34887     (Corr)     .01780     .65130        353    
+Security Check 3.Queue.WaitingTime          .23720     (Insuf)    .00000     .42340        116    
+Ticket Checkin.Queue.WaitingTime            .08979     (Corr)     .00000     .18611        354    
+Security Check 6.Queue.WaitingTime              --         --         --         --          0
+Security Check 4.Queue.WaitingTime              --         --         --         --          0
+Security Check 5.Queue.WaitingTime              --         --         --         --          0
+Security Check 2.Queue.WaitingTime          .23704     (Insuf)    .00000     .44061        118    
+Security Check.Queue.WaitingTime            .23072     (Insuf)    .00000     .42553        120    
+
+                                     DISCRETE-CHANGE VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Final Value
+___________________________________________________________________________________________________
+
+ent Passenger.WIP                           24.629     (Corr)     .00000     148.00     .00000    
+r Checking Agents.NumberBusy                .86458     (Insuf)    .00000     4.0000     .00000    
+r Checking Agents.NumberScheduled           4.0000     (Insuf)    4.0000     4.0000     4.0000    
+r Checking Agents.Utilization               .21614     (Insuf)    .00000     1.0000     .00000    
+r Security Check 6.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 6.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 6.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 5.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 4.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 3.NumberBusy               .30019     (Insuf)    .00000     1.0000     .00000    
+r Security Check 3.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 3.Utilization              .30019     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberBusy               .30382     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 2.Utilization              .30382     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberBusy               .29633     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 1.Utilization              .29633     (Insuf)    .00000     1.0000     .00000    
+Security Check 3.Queue.NumberInQueue        5.5031     (Insuf)    .00000     33.000     .00000    
+Ticket Checkin.Queue.NumberInQueue          6.3571     (Corr)     .00000     61.000     .00000    
+Security Check 6.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 4.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 5.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 2.Queue.NumberInQueue        5.5942     (Insuf)    .00000     34.000     .00000    
+Security Check.Queue.NumberInQueue          5.5371     (Insuf)    .00000     34.000     .00000    
+
+                                             OUTPUTS
+
+Identifier                                   Value
+_____________________________________________________________
+
+ent Passenger.NumberIn                      353.00    
+ent Passenger.NumberOut                     353.00    
+r Checking Agents.NumberSeized              354.00    
+r Checking Agents.ScheduledUtilization      .21614    
+r Security Check 6.NumberSeized             .00000    
+r Security Check 6.ScheduledUtilization     .00000    
+r Security Check 5.NumberSeized             .00000    
+r Security Check 5.ScheduledUtilization     .00000    
+r Security Check 4.NumberSeized             .00000    
+r Security Check 4.ScheduledUtilization     .00000    
+r Security Check 3.NumberSeized             116.00    
+r Security Check 3.ScheduledUtilization     .30019    
+r Security Check 2.NumberSeized             118.00    
+r Security Check 2.ScheduledUtilization     .30382    
+r Security Check 1.NumberSeized             120.00    
+r Security Check 1.ScheduledUtilization     .29633    
+System.NumberOut                            354.00    
+
+Beginning replication 6 of 10
+
+----------------------------------------------------------------------
+17114:CCREAT
+A runtime error was detected at time 1.0333333 at the following block:
+
+ *    1 9$              CREATE,1,MinutesToBaseTime(0.0),ent Passenger:
+                            MinutesToBaseTime(POIS(.2)):
+                            NEXT(10$);
+
+Maximum of 150 entities exceeded.
+Possible causes:
+- A logic problem in your model is creating too many entities or not
+  disposing them. The run controller may be helpful in finding the problem.
+- You are in demo mode and have exceeded the entity limit. The commercial
+  version is required to run large models.
+- You have set an entity limit on the DISCRETE element that is too small.
+  Remove the limit or set it to a larger number.
+- You have exceeded the standard array s 
+pace for models. Use the Array Sizes
+  page in the Run/Setup dialog to increase the RSET space allocated and
+  recheck your model.
+----------------------------------------------------------------------
+
+
+SIMAN Run Controller.
+
+1.0333333 Hours>
+                                      ARENA Simulation Results
+                                   Windows User - License: STUDENT
+
+                                  Summary for Replication 6 of 10
+
+Project: Unnamed Project                                             Run execution date : 6/25/2017
+Analyst: Windows User                                                Model revision date: 6/25/2017
+
+Replication ended at time      : 5.0 Hours 
+Base Time Units: Hours
+
+                                           TALLY VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Observations
+___________________________________________________________________________________________________
+
+ent Passenger.VATime                        .02452     .00110     .00915     .07784        390    
+ent Passenger.NVATime                       .00000     .00000     .00000     .00000        390    
+ent Passenger.WaitTime                      .27338     (Corr)     .00000     .58635        390    
+ent Passenger.TranTime                      .00000     .00000     .00000     .00000        390    
+ent Passenger.OtherTime                     .00000     .00000     .00000     .00000        390    
+ent Passenger.TotalTime                     .29791     (Corr)     .01279     .62282        390    
+Security Check 3.Queue.WaitingTime          .16487     (Insuf)    .00000     .39146        129    
+Ticket Checkin.Queue.WaitingTime            .10408     (Corr)     .00000     .22000        391    
+Security Check 6.Queue.WaitingTime              --         --         --         --          0
+Security Check 4.Queue.WaitingTime              --         --         --         --          0
+Security Check 5.Queue.WaitingTime              --         --         --         --          0
+Security Check 2.Queue.WaitingTime          .17443     (Insuf)    .00000     .38943        129    
+Security Check.Queue.WaitingTime            .17098     (Insuf)    .00000     .39485        133    
+
+                                     DISCRETE-CHANGE VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Final Value
+___________________________________________________________________________________________________
+
+ent Passenger.WIP                           23.236     (Corr)     .00000     148.00     .00000    
+r Checking Agents.NumberBusy                .95394     (Insuf)    .00000     4.0000     .00000    
+r Checking Agents.NumberScheduled           4.0000     (Insuf)    4.0000     4.0000     4.0000    
+r Checking Agents.Utilization               .23848     (Insuf)    .00000     1.0000     .00000    
+r Security Check 6.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 6.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 6.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 5.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 4.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 3.NumberBusy               .31580     (Insuf)    .00000     1.0000     .00000    
+r Security Check 3.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 3.Utilization              .31580     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberBusy               .32592     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 2.Utilization              .32592     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberBusy               .32491     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 1.Utilization              .32491     (Insuf)    .00000     1.0000     .00000    
+Security Check 3.Queue.NumberInQueue        4.2535     (Insuf)    .00000     32.000     .00000    
+Ticket Checkin.Queue.NumberInQueue          8.1387     (Corr)     .00000     77.000     .00000    
+Security Check 6.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 4.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 5.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 2.Queue.NumberInQueue        4.5002     (Insuf)    .00000     32.000     .00000    
+Security Check.Queue.NumberInQueue          4.5480     (Insuf)    .00000     33.000     .00000    
+
+                                             OUTPUTS
+
+Identifier                                   Value
+_____________________________________________________________
+
+ent Passenger.NumberIn                      390.00    
+ent Passenger.NumberOut                     390.00    
+r Checking Agents.NumberSeized              391.00    
+r Checking Agents.ScheduledUtilization      .23848    
+r Security Check 6.NumberSeized             .00000    
+r Security Check 6.ScheduledUtilization     .00000    
+r Security Check 5.NumberSeized             .00000    
+r Security Check 5.ScheduledUtilization     .00000    
+r Security Check 4.NumberSeized             .00000    
+r Security Check 4.ScheduledUtilization     .00000    
+r Security Check 3.NumberSeized             129.00    
+r Security Check 3.ScheduledUtilization     .31580    
+r Security Check 2.NumberSeized             129.00    
+r Security Check 2.ScheduledUtilization     .32592    
+r Security Check 1.NumberSeized             133.00    
+r Security Check 1.ScheduledUtilization     .32491    
+System.NumberOut                            391.00    
+
+Beginning replication 7 of 10
+
+----------------------------------------------------------------------
+17114:CCREAT
+A runtime error was detected at time 2.4833333 at the following block:
+
+ *    1 9$              CREATE,1,MinutesToBaseTime(0.0),ent Passenger:
+                            MinutesToBaseTime(POIS(.2)):
+                            NEXT(10$);
+
+Maximum of 150 entities exceeded.
+Possible causes:
+- A logic problem in your model is creating too many entities or not
+  disposing them. The run controller may be helpful in finding the problem.
+- You are in demo mode and have exceeded the entity limit. The commercial
+  version is required to run large models.
+- You have set an entity limit on the DISCRETE element that is too small.
+  Remove the limit or set it to a larger number.
+- You have exceeded the standard array s 
+pace for models. Use the Array Sizes
+  page in the Run/Setup dialog to increase the RSET space allocated and
+  recheck your model.
+----------------------------------------------------------------------
+
+
+SIMAN Run Controller.
+
+2.4833333 Hours>
+                                      ARENA Simulation Results
+                                   Windows User - License: STUDENT
+
+                                  Summary for Replication 7 of 10
+
+Project: Unnamed Project                                             Run execution date : 6/25/2017
+Analyst: Windows User                                                Model revision date: 6/25/2017
+
+Replication ended at time      : 5.0 Hours 
+Base Time Units: Hours
+
+                                           TALLY VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Observations
+___________________________________________________________________________________________________
+
+ent Passenger.VATime                        .02564     .00104     .00847     .09001        710    
+ent Passenger.NVATime                       .00000     .00000     .00000     .00000        710    
+ent Passenger.WaitTime                      .26703     (Corr)     .00000     .57349        710    
+ent Passenger.TranTime                      .00000     .00000     .00000     .00000        710    
+ent Passenger.OtherTime                     .00000     .00000     .00000     .00000        710    
+ent Passenger.TotalTime                     .29267     (Corr)     .01227     .60446        710    
+Security Check 3.Queue.WaitingTime          .21430     (Insuf)    .00000     .46440        230    
+Ticket Checkin.Queue.WaitingTime            .05613     (Corr)     .00000     .14484        711    
+Security Check 6.Queue.WaitingTime              --         --         --         --          0
+Security Check 4.Queue.WaitingTime              --         --         --         --          0
+Security Check 5.Queue.WaitingTime              --         --         --         --          0
+Security Check 2.Queue.WaitingTime          .20851     (Insuf)    .00000     .47069        240    
+Security Check.Queue.WaitingTime            .21139     (Insuf)    .00000     .47826        241    
+
+                                     DISCRETE-CHANGE VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Final Value
+___________________________________________________________________________________________________
+
+ent Passenger.WIP                           41.559     (Corr)     .00000     148.00     .00000    
+r Checking Agents.NumberBusy                1.8645     (Insuf)    .00000     4.0000     .00000    
+r Checking Agents.NumberScheduled           4.0000     (Insuf)    4.0000     4.0000     4.0000    
+r Checking Agents.Utilization               .46614     (Insuf)    .00000     1.0000     .00000    
+r Security Check 6.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 6.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 6.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 5.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 4.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 3.NumberBusy               .57245     (Insuf)    .00000     1.0000     .00000    
+r Security Check 3.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 3.Utilization              .57245     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberBusy               .59580     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 2.Utilization              .59580     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberBusy               .61171     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 1.Utilization              .61171     (Insuf)    .00000     1.0000     .00000    
+Security Check 3.Queue.NumberInQueue        9.8576     (Corr)     .00000     38.000     .00000    
+Ticket Checkin.Queue.NumberInQueue          7.9810     (Corr)     .00000     47.000     .00000    
+Security Check 6.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 4.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 5.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 2.Queue.NumberInQueue        10.008     (Corr)     .00000     39.000     .00000    
+Security Check.Queue.NumberInQueue          10.189     (Corr)     .00000     39.000     .00000    
+
+                                             OUTPUTS
+
+Identifier                                   Value
+_____________________________________________________________
+
+ent Passenger.NumberIn                      710.00    
+ent Passenger.NumberOut                     710.00    
+r Checking Agents.NumberSeized              711.00    
+r Checking Agents.ScheduledUtilization      .46614    
+r Security Check 6.NumberSeized             .00000    
+r Security Check 6.ScheduledUtilization     .00000    
+r Security Check 5.NumberSeized             .00000    
+r Security Check 5.ScheduledUtilization     .00000    
+r Security Check 4.NumberSeized             .00000    
+r Security Check 4.ScheduledUtilization     .00000    
+r Security Check 3.NumberSeized             230.00    
+r Security Check 3.ScheduledUtilization     .57245    
+r Security Check 2.NumberSeized             240.00    
+r Security Check 2.ScheduledUtilization     .59580    
+r Security Check 1.NumberSeized             241.00    
+r Security Check 1.ScheduledUtilization     .61171    
+System.NumberOut                            711.00    
+
+Beginning replication 8 of 10
+
+----------------------------------------------------------------------
+17114:CCREAT
+A runtime error was detected at time 4.55 at the following block:
+
+ *    1 9$              CREATE,1,MinutesToBaseTime(0.0),ent Passenger:
+                            MinutesToBaseTime(POIS(.2)):
+                            NEXT(10$);
+
+Maximum of 150 entities exceeded.
+Possible causes:
+- A logic problem in your model is creating too many entities or not
+  disposing them. The run controller may be helpful in finding the problem.
+- You are in demo mode and have exceeded the entity limit. The commercial
+  version is required to run large models.
+- You have set an entity limit on the DISCRETE element that is too small.
+  Remove the limit or set it to a larger number.
+- You have exceeded the standard array s 
+pace for models. Use the Array Sizes
+  page in the Run/Setup dialog to increase the RSET space allocated and
+  recheck your model.
+----------------------------------------------------------------------
+
+
+SIMAN Run Controller.
+
+4.55 Hours>
+                                      ARENA Simulation Results
+                                   Windows User - License: STUDENT
+
+                                  Summary for Replication 8 of 10
+
+Project: Unnamed Project                                             Run execution date : 6/25/2017
+Analyst: Windows User                                                Model revision date: 6/25/2017
+
+Replication ended at time      : 5.0 Hours 
+Base Time Units: Hours
+
+                                           TALLY VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Observations
+___________________________________________________________________________________________________
+
+ent Passenger.VATime                        .02484     8.3964E-04 .00883     .10765       1192    
+ent Passenger.NVATime                       .00000     .00000     .00000     .00000       1192    
+ent Passenger.WaitTime                      .24395     (Corr)     .00000     .58474       1192    
+ent Passenger.TranTime                      .00000     .00000     .00000     .00000       1192    
+ent Passenger.OtherTime                     .00000     .00000     .00000     .00000       1192    
+ent Passenger.TotalTime                     .26879     (Corr)     .01770     .64397       1192    
+Security Check 3.Queue.WaitingTime          .20789     (Corr)     .00000     .50646        398    
+Ticket Checkin.Queue.WaitingTime            .03584     (Corr)     .00000     .17366       1233    
+Security Check 6.Queue.WaitingTime              --         --         --         --          0
+Security Check 4.Queue.WaitingTime              --         --         --         --          0
+Security Check 5.Queue.WaitingTime              --         --         --         --          0
+Security Check 2.Queue.WaitingTime          .20641     (Corr)     .00000     .53241        401    
+Security Check.Queue.WaitingTime            .21540     (Corr)     .00000     .51909        396    
+
+                                     DISCRETE-CHANGE VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Final Value
+___________________________________________________________________________________________________
+
+ent Passenger.WIP                           68.002     (Corr)     .00000     148.00     40.000    
+r Checking Agents.NumberBusy                3.0784     (Corr)     .00000     4.0000     .00000    
+r Checking Agents.NumberScheduled           4.0000     (Insuf)    4.0000     4.0000     4.0000    
+r Checking Agents.Utilization               .76960     (Corr)     .00000     1.0000     .00000    
+r Security Check 6.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 6.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 6.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 5.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 4.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 3.NumberBusy               .98873     (Insuf)    .00000     1.0000     1.0000    
+r Security Check 3.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 3.Utilization              .98873     (Insuf)    .00000     1.0000     1.0000    
+r Security Check 2.NumberBusy               .99684     (Insuf)    .00000     1.0000     1.0000    
+r Security Check 2.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 2.Utilization              .99684     (Insuf)    .00000     1.0000     1.0000    
+r Security Check 1.NumberBusy               .99923     (Insuf)    .00000     1.0000     1.0000    
+r Security Check 1.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 1.Utilization              .99923     (Insuf)    .00000     1.0000     1.0000    
+Security Check 3.Queue.NumberInQueue        17.377     (Corr)     .00000     42.000     11.000    
+Ticket Checkin.Queue.NumberInQueue          8.8383     (Corr)     .00000     50.000     .00000    
+Security Check 6.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 4.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 5.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 2.Queue.NumberInQueue        17.785     (Corr)     .00000     42.000     15.000    
+Security Check.Queue.NumberInQueue          18.028     (Corr)     .00000     43.000     12.000    
+
+                                             OUTPUTS
+
+Identifier                                   Value
+_____________________________________________________________
+
+ent Passenger.NumberIn                      1232.0    
+ent Passenger.NumberOut                     1192.0    
+r Checking Agents.NumberSeized              1233.0    
+r Checking Agents.ScheduledUtilization      .76960    
+r Security Check 6.NumberSeized             .00000    
+r Security Check 6.ScheduledUtilization     .00000    
+r Security Check 5.NumberSeized             .00000    
+r Security Check 5.ScheduledUtilization     .00000    
+r Security Check 4.NumberSeized             .00000    
+r Security Check 4.ScheduledUtilization     .00000    
+r Security Check 3.NumberSeized             398.00    
+r Security Check 3.ScheduledUtilization     .98873    
+r Security Check 2.NumberSeized             401.00    
+r Security Check 2.ScheduledUtilization     .99684    
+r Security Check 1.NumberSeized             396.00    
+r Security Check 1.ScheduledUtilization     .99923    
+System.NumberOut                            1192.0    
+
+Beginning replication 9 of 10
+
+----------------------------------------------------------------------
+17114:CCREAT
+A runtime error was detected at time 1.2333333 at the following block:
+
+ *    1 9$              CREATE,1,MinutesToBaseTime(0.0),ent Passenger:
+                            MinutesToBaseTime(POIS(.2)):
+                            NEXT(10$);
+
+Maximum of 150 entities exceeded.
+Possible causes:
+- A logic problem in your model is creating too many entities or not
+  disposing them. The run controller may be helpful in finding the problem.
+- You are in demo mode and have exceeded the entity limit. The commercial
+  version is required to run large models.
+- You have set an entity limit on the DISCRETE element that is too small.
+  Remove the limit or set it to a larger number.
+- You have exceeded the standard array s 
+pace for models. Use the Array Sizes
+  page in the Run/Setup dialog to increase the RSET space allocated and
+  recheck your model.
+----------------------------------------------------------------------
+
+
+SIMAN Run Controller.
+
+1.2333333 Hours>
+                                      ARENA Simulation Results
+                                   Windows User - License: STUDENT
+
+                                  Summary for Replication 9 of 10
+
+Project: Unnamed Project                                             Run execution date : 6/25/2017
+Analyst: Windows User                                                Model revision date: 6/25/2017
+
+Replication ended at time      : 5.0 Hours 
+Base Time Units: Hours
+
+                                           TALLY VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Observations
+___________________________________________________________________________________________________
+
+ent Passenger.VATime                        .02425     .00141     .00866     .10843        437    
+ent Passenger.NVATime                       .00000     .00000     .00000     .00000        437    
+ent Passenger.WaitTime                      .28459     (Corr)     .00000     .61119        437    
+ent Passenger.TranTime                      .00000     .00000     .00000     .00000        437    
+ent Passenger.OtherTime                     .00000     .00000     .00000     .00000        437    
+ent Passenger.TotalTime                     .30884     (Corr)     .00883     .64797        437    
+Security Check 3.Queue.WaitingTime          .25106     (Insuf)    .00000     .49343        147    
+Ticket Checkin.Queue.WaitingTime            .02629     (Corr)     .00000     .09553        438    
+Security Check 6.Queue.WaitingTime              --         --         --         --          0
+Security Check 4.Queue.WaitingTime              --         --         --         --          0
+Security Check 5.Queue.WaitingTime              --         --         --         --          0
+Security Check 2.Queue.WaitingTime          .26188     (Insuf)    .00000     .51742        145    
+Security Check.Queue.WaitingTime            .26423     (Insuf)    .00000     .50890        146    
+
+                                     DISCRETE-CHANGE VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Final Value
+___________________________________________________________________________________________________
+
+ent Passenger.WIP                           26.992     (Corr)     .00000     148.00     .00000    
+r Checking Agents.NumberBusy                1.0236     (Insuf)    .00000     4.0000     .00000    
+r Checking Agents.NumberScheduled           4.0000     (Insuf)    4.0000     4.0000     4.0000    
+r Checking Agents.Utilization               .25592     (Insuf)    .00000     1.0000     .00000    
+r Security Check 6.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 6.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 6.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 5.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 4.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 3.NumberBusy               .36237     (Insuf)    .00000     1.0000     .00000    
+r Security Check 3.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 3.Utilization              .36237     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberBusy               .36691     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 2.Utilization              .36691     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberBusy               .37026     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 1.Utilization              .37026     (Insuf)    .00000     1.0000     .00000    
+Security Check 3.Queue.NumberInQueue        7.3811     (Insuf)    .00000     40.000     .00000    
+Ticket Checkin.Queue.NumberInQueue          2.3029     (Corr)     .00000     29.000     .00000    
+Security Check 6.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 4.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 5.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 2.Queue.NumberInQueue        7.5944     (Insuf)    .00000     40.000     .00000    
+Security Check.Queue.NumberInQueue          7.7154     (Insuf)    .00000     40.000     .00000    
+
+                                             OUTPUTS
+
+Identifier                                   Value
+_____________________________________________________________
+
+ent Passenger.NumberIn                      437.00    
+ent Passenger.NumberOut                     437.00    
+r Checking Agents.NumberSeized              438.00    
+r Checking Agents.ScheduledUtilization      .25592    
+r Security Check 6.NumberSeized             .00000    
+r Security Check 6.ScheduledUtilization     .00000    
+r Security Check 5.NumberSeized             .00000    
+r Security Check 5.ScheduledUtilization     .00000    
+r Security Check 4.NumberSeized             .00000    
+r Security Check 4.ScheduledUtilization     .00000    
+r Security Check 3.NumberSeized             147.00    
+r Security Check 3.ScheduledUtilization     .36237    
+r Security Check 2.NumberSeized             145.00    
+r Security Check 2.ScheduledUtilization     .36691    
+r Security Check 1.NumberSeized             146.00    
+r Security Check 1.ScheduledUtilization     .37026    
+System.NumberOut                            438.00    
+
+Beginning replication 10 of 10
+
+----------------------------------------------------------------------
+17114:CCREAT
+A runtime error was detected at time 2.2333333 at the following block:
+
+ *    1 9$              CREATE,1,MinutesToBaseTime(0.0),ent Passenger:
+                            MinutesToBaseTime(POIS(.2)):
+                            NEXT(10$);
+
+Maximum of 150 entities exceeded.
+Possible causes:
+- A logic problem in your model is creating too many entities or not
+  disposing them. The run controller may be helpful in finding the problem.
+- You are in demo mode and have exceeded the entity limit. The commercial
+  version is required to run large models.
+- You have set an entity limit on the DISCRETE element that is too small.
+  Remove the limit or set it to a larger number.
+- You have exceeded the standard array s 
+pace for models. Use the Array Sizes
+  page in the Run/Setup dialog to increase the RSET space allocated and
+  recheck your model.
+----------------------------------------------------------------------
+
+
+SIMAN Run Controller.
+
+2.2333333 Hours>
+                                      ARENA Simulation Results
+                                   Windows User - License: STUDENT
+
+                                  Summary for Replication 10 of 10
+
+Project: Unnamed Project                                             Run execution date : 6/25/2017
+Analyst: Windows User                                                Model revision date: 6/25/2017
+
+Replication ended at time      : 5.0 Hours 
+Base Time Units: Hours
+
+                                           TALLY VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Observations
+___________________________________________________________________________________________________
+
+ent Passenger.VATime                        .02554     7.2481E-04 .00879     .09498        662    
+ent Passenger.NVATime                       .00000     .00000     .00000     .00000        662    
+ent Passenger.WaitTime                      .22893     (Corr)     .00000     .60852        662    
+ent Passenger.TranTime                      .00000     .00000     .00000     .00000        662    
+ent Passenger.OtherTime                     .00000     .00000     .00000     .00000        662    
+ent Passenger.TotalTime                     .25447     (Corr)     .01428     .63318        662    
+Security Check 3.Queue.WaitingTime          .18234     (Insuf)    .00000     .43180        214    
+Ticket Checkin.Queue.WaitingTime            .04869     (Corr)     .00000     .21484        663    
+Security Check 6.Queue.WaitingTime              --         --         --         --          0
+Security Check 4.Queue.WaitingTime              --         --         --         --          0
+Security Check 5.Queue.WaitingTime              --         --         --         --          0
+Security Check 2.Queue.WaitingTime          .18084     (Insuf)    .00000     .44641        220    
+Security Check.Queue.WaitingTime            .17930     (Insuf)    .00000     .46090        229    
+
+                                     DISCRETE-CHANGE VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Final Value
+___________________________________________________________________________________________________
+
+ent Passenger.WIP                           33.691     (Corr)     .00000     148.00     .00000    
+r Checking Agents.NumberBusy                1.7237     (Insuf)    .00000     4.0000     .00000    
+r Checking Agents.NumberScheduled           4.0000     (Insuf)    4.0000     4.0000     4.0000    
+r Checking Agents.Utilization               .43094     (Insuf)    .00000     1.0000     .00000    
+r Security Check 6.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 6.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 6.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 5.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 5.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberBusy               .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 4.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 4.Utilization              .00000     (Insuf)    .00000     .00000     .00000    
+r Security Check 3.NumberBusy               .53313     (Insuf)    .00000     1.0000     .00000    
+r Security Check 3.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 3.Utilization              .53313     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberBusy               .55641     (Insuf)    .00000     1.0000     .00000    
+r Security Check 2.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 2.Utilization              .55641     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberBusy               .57105     (Insuf)    .00000     1.0000     .00000    
+r Security Check 1.NumberScheduled          1.0000     (Insuf)    1.0000     1.0000     1.0000    
+r Security Check 1.Utilization              .57105     (Insuf)    .00000     1.0000     .00000    
+Security Check 3.Queue.NumberInQueue        7.8041     (Corr)     .00000     34.000     .00000    
+Ticket Checkin.Queue.NumberInQueue          6.4556     (Corr)     .00000     61.000     .00000    
+Security Check 6.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 4.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 5.Queue.NumberInQueue        .00000     (Insuf)    .00000     .00000     .00000    
+Security Check 2.Queue.NumberInQueue        7.9568     (Corr)     .00000     35.000     .00000    
+Security Check.Queue.NumberInQueue          8.2119     (Corr)     .00000     35.000     .00000    
+
+                                             OUTPUTS
+
+Identifier                                   Value
+_____________________________________________________________
+
+ent Passenger.NumberIn                      662.00    
+ent Passenger.NumberOut                     662.00    
+r Checking Agents.NumberSeized              663.00    
+r Checking Agents.ScheduledUtilization      .43094    
+r Security Check 6.NumberSeized             .00000    
+r Security Check 6.ScheduledUtilization     .00000    
+r Security Check 5.NumberSeized             .00000    
+r Security Check 5.ScheduledUtilization     .00000    
+r Security Check 4.NumberSeized             .00000    
+r Security Check 4.ScheduledUtilization     .00000    
+r Security Check 3.NumberSeized             214.00    
+r Security Check 3.ScheduledUtilization     .53313    
+r Security Check 2.NumberSeized             220.00    
+r Security Check 2.ScheduledUtilization     .55641    
+r Security Check 1.NumberSeized             229.00    
+r Security Check 1.ScheduledUtilization     .57105    
+System.NumberOut                            663.00    
+
+
+                                      ARENA Simulation Results
+                                   Windows User - License: STUDENT
+
+                                 Output Summary for 10 Replications
+
+Project: Unnamed Project                                             Run execution date : 6/25/2017
+Analyst: Windows User                                                Model revision date: 6/25/2017
+
+
+                                             OUTPUTS
+
+Identifier                                 Average    Half-width Minimum    Maximum # Replications
+___________________________________________________________________________________________________
+
+ent Passenger.NumberIn                      658.00     214.78     353.00     1232.0     10
+ent Passenger.NumberOut                     654.00     208.81     353.00     1192.0     10
+r Checking Agents.NumberSeized              659.00     214.78     354.00     1233.0     10
+r Checking Agents.ScheduledUtilization      .40574     .13383     .21614     .76960     10
+r Security Check 6.NumberSeized             .00000     .00000     .00000     .00000     10
+r Security Check 6.ScheduledUtilization     .00000     .00000     .00000     .00000     10
+r Security Check 5.NumberSeized             .00000     .00000     .00000     .00000     10
+r Security Check 5.ScheduledUtilization     .00000     .00000     .00000     .00000     10
+r Security Check 4.NumberSeized             .00000     .00000     .00000     .00000     10
+r Security Check 4.ScheduledUtilization     .00000     .00000     .00000     .00000     10
+r Security Check 3.NumberSeized             215.60     69.388     116.00     398.00     10
+r Security Check 3.ScheduledUtilization     .53680     .17332     .30019     .98873     10
+r Security Check 2.NumberSeized             218.80     70.210     118.00     401.00     10
+r Security Check 2.ScheduledUtilization     .54898     .17480     .30382     .99684     10
+r Security Check 1.NumberSeized             220.80     69.592     120.00     396.00     10
+r Security Check 1.ScheduledUtilization     .55253     .17576     .29633     .99923     10
+System.NumberOut                            654.90     208.66     354.00     1192.0     10
+
+Simulation run time: 0.40 minutes.
+Simulation run completed with 10 error(s) and 0 warning(s).
