@@ -31,6 +31,57 @@
 # Bayesian Models
 - p(A|B) = p(B|A)*p(A) / p(B)
 - Empirical Bayes
+- Need priors, but can allow your parameters to have priors as well, all be updated w/ data
   
+# Community Graphs
+- Want to find highly-intereconnected subpopulations
+- Community: a set of nodes that highly connected within itself
+  - Lines: arcs/edges
+  - Clique: a set of nodes that all have edges between each other
+- Louvain algorithm: decompose a graph into communities
+  - Set each node as its own community
+  - For each node, if it modes to another community, how much does modularity increase?
+  - Does for every node, assigns on to the biggest jump
+  - Repeat until communities are set
+  - NOW, each community is treated as a supernode, with weights equaling all arcs between the supernodes
+  - Repeat the process to find supercommunities
+  - Is a heuristic
+    - Not guaranteed to find global best
+    - But works quickly
     
+# Neural Networks
+- Reacts to patterns that we don't understand well and can't describe mathematically
+- Recognize speech and language, images, etc.
+- Modeled after neurons in brain:
+  - Input
+    - Each takes 1 piece of invo
+  - Hidden (middle processing)
+    - Receive values from multiple inputs
+    - Combines them via some set of weights
+    - Gives its output to next layer of hidden, which repeats
+  - Output
+    - Gets some info from the last set of hidden, outputs a result (usually highest predicted result)
+- When output is scored (feedback), all the weights/functions internally are updated
+  - Might do basic gradient descent and ultimately settle on one value
+  - In practice, need too much data to train well
+  - Hard to tune the learning algorithm
+    - Either learn too slowly
+    - Or too quickly and jump all over
+- Deep Learning
+  - Similar to neural networks
+  - Many layers (deep)
+  - Tends to have better success than neural networks
+    - NLP
+    - Speech processing
+    - Image processing
     
+# Competitive models
+- What if the system reacts to our action?
+  - We need to use analytics to consider all sides of the system and act accordingly
+  - IE build a price model, but then competitors react to your choice
+- Game Theory
+- Cooperative Game Theory - involves both competition and coordination
+  - Make best decision based on partner's actions
+- Pure strategy and mixed strategy
+- Perfect vs imperfect information
+- There are optimization modesl to find best strategy
