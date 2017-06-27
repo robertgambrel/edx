@@ -2,3 +2,95 @@
 - How it's used in statistics
   - Want to determine coefficients to minimize some error term
   - Done for linear regression, lasso regression (adds a constriant on sum of coefficeints), ridge (adds a constraint on sum of squared coefs), and elastic net (adds both constraints)
+  - Logistic regression as well
+  - SVM for classification also minimizes distance b/w support vectors
+    - Hard classification: restraint that all points are calssified correctly
+    - Soft: just add the misclassification penalty as a function to be minimized along w/ support vector distance
+  - Exponential smoothing - alpha, beta, gamma fit to minimize x - xhat distances
+  - ARIMA and GARCH - minimize errors
+  - Clustering:
+    - Constraint: each point assigned to only 1 cluster
+    - Objective function: minimize total distance from data points to their cluster center
+- Some are easier and faster to solve than others
+
+# Classification of Optimization Problems
+- Linear program:
+  - f(x) is a linear function
+    - minimize or maximize C + Sum(c_i * x_i)
+  - Constraint set X is defined by linear equations and inequalities
+    - Sum(a_ij * x_i) <= b_j for all j
+    - Or == b_j
+    - or >= b_j
+  - Easy and fast to solve, even for large equations
+- Convex quadratic program
+  - f(x) is convex quadratic program
+  - Constraints are again linear
+  - Easy and fast to solve, not quite as fast as linear
+- Convex optimization problem
+  - f(x) is concave (if maximizing)
+    - or convex (if minimizing)
+  - constraint set X is convex set
+  - Easy to solve, but solultions can take a lot longer
+- Integer program
+  - Linear program, plus
+    - Some or all variables restricted to take only integer values
+      - Or could restrict some variables to be binary
+  - Much more difficult to solve
+- General non-convex program
+  - Hard to find optimal solutions
+- Order:
+  - linear
+  - convex quadratic
+  - convex
+  - integer
+  - general non-convex programs
+- What if it's too hard? 
+  - Use a heuristic
+- Network Models
+  - Multiple nodes, with connections between all of them
+  - flow between nodes (on the connection arc) is variable, subject to constraints
+  - flow into node must equal flow out of node
+  - Objective function: linear function of variables
+  - VERY QUICK TO SOLVE - FASTEST ONE AVAILABLE
+  - If all data is integer, then optimal values will also be integer by default
+  - Uses:
+    - Shortest path (google maps)
+    - Assignment (which worker gets which job to maximize efficiency)
+    - Maximum flow model (How to maximize flow through the system)
+- How to address uncertainty?
+
+# Uncertainty
+- All of what we've done so far implicitly assumes we know exact values of inputs
+- Most models perform OK if you have input uncertainty, but analyst must knwo that output might not be exact
+- Model conservatively:
+  - On constraint, build in some buffer (ie minimum workers + a few more to be safe)
+- Scenario modeling:
+  - Define multiple scenarios with different levels of severity, and model over all of them
+  - Choose a model that satisfies every scenario's constraint
+    - Is robust, but more expensive
+  - Could also optimize for expected cost
+    - Need probability of each scenario, but won't spend as much as modeling for the worst case alone
+- Dynamic Program
+  - States - exact system configuration
+  - Decisions - choices for next state
+  - Bellmlan's equation: determines optimal decisions at each state
+  - Assumes no uncertainty
+- Stochastic dynamic program
+  - Decision isn't guaranteed - just sets up the *probabilities* of the next state chosen
+- Markov decision process
+  - stochastic dynamic program w/ discrete states and decisions
+  - probabilities depend onlyl on current state / decision
+
+# Basic optimization algorithms
+- 2 main steps:
+  - Create a first solution
+  - Then repeat:
+    - Find an improving direction t
+    - Use a step size theta to move along t
+    - New solution = old solution * theta * t
+  - Stop when step is super small, or iteration count runs out
+- Non-convex optimization problems:
+  - Not guaranteed to converge to optimal solution
+    - Might converge to infeasible solution
+    - Or to local optimum
+- Integer programs may run long time
