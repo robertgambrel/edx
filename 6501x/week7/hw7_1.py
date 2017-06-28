@@ -4,6 +4,8 @@ EdX HW 7
 """
 from pulp import *
 import pandas as pd
+import os
+os.chdir('C:\\Users\\robert.gambrel\\Documents\\edx')
 
 food_data = pd.read_csv('C:\\Users\\robert.gambrel\\Documents\\edx\\food_prices.csv')
 
@@ -33,7 +35,6 @@ food_inputs = LpVariable.dicts("Foods",foods,0)
 prob += lpSum([price[i]*food_inputs[i] for i in foods]), "Total Cost of Food per Meal"
 
 # Add Maxumum constraints
-prob += lpSum([food_inputs[i] for i in foods]) == 100, "PercentagesSum"
 prob += lpSum([calories[i] * food_inputs[i] for i in foods]) >= 1500, "MinCalories"
 prob += lpSum([cholesterol[i] * food_inputs[i] for i in foods]) >= 30.0, "MinCholesterol"
 prob += lpSum([fat[i] * food_inputs[i] for i in foods]) >= 20.0, "MinFat"
@@ -46,7 +47,7 @@ prob += lpSum([vit_c[i] * food_inputs[i] for i in foods]) >= 400.0, "MinVitC"
 prob += lpSum([calcium[i] * food_inputs[i] for i in foods]) >= 700.0, "MinCalcium"
 prob += lpSum([iron[i] * food_inputs[i] for i in foods]) >= 10.0, "MinIron"
 
-# Maximum constraints
+# Minumum constraints
 prob += lpSum([calories[i] * food_inputs[i] for i in foods]) <= 2500, "MaxCalories"
 prob += lpSum([cholesterol[i] * food_inputs[i] for i in foods]) <= 240.0, "MaxCholesterol"
 prob += lpSum([fat[i] * food_inputs[i] for i in foods]) <= 70.0, "MaxFat"
@@ -60,11 +61,14 @@ prob += lpSum([calcium[i] * food_inputs[i] for i in foods]) <= 1500.0, "MaxCalci
 prob += lpSum([iron[i] * food_inputs[i] for i in foods]) <= 40.0, "MaxIron"
 
 prob.solve()
-
+prob.writeLP('army_food.lp')
 # The status of the solution is printed to the screen
 print("Status:", LpStatus[prob.status])
 
 # Each of the variables is printed with it's resolved optimum value
 for v in prob.variables():
     print(v.name, "=", v.varValue)
+    
+print("Total Cost of Ingredients per meal = ", value(prob.objective))
+
     
