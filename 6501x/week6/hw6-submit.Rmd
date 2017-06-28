@@ -203,5 +203,5 @@ This model assigns 0 to all missing values and adds a dummy indicating whether a
 
 # Q3
 
-My wife and I usually cook dinner together, but sometimes we get in each other's way in the small kitchen, and sometimes one of us is busy with the kids and can't help cook. We might try optimizing the dinner preparation process to output the best meal using only 1 chef in the kitchen. Variables would be raw ingredients and perhaps which cooking tools to use (pots, pans, oven, grill); constraints would be maximum stovetop and oven space and preparer time, as well as a budgetary constraint; the output would be meal quality, which ideally would factor in meal variety over time.
+My wife and I usually cook dinner together, but sometimes we get in each other's way in the small kitchen, and sometimes one of us is busy with the kids and can't help cook. We might try optimizing the dinner preparation process to output the best meal using only 1 chef in the kitchen. Variables would be raw ingredients and perhaps which cooking tools to use (pots, pans, oven, grill); constraints would be maximum stovetop and oven space and preparer time, as well as a budgetary constraint; the output would be a meal, the quality of which we'd want to maximize. Datawise, we would need to know the costs of input ingredients. 
 
