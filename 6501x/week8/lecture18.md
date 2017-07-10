@@ -1,0 +1,17 @@
+# First case - Power Company
+- Some customers don't pay bills (could pay but don't)
+- Want to turn their power off
+  - But only want to target those who will never pay, period
+  - NOT those who just forgot or fell behind but want to dig out
+- Logistical problems - have more people to shut off each month than people available
+  - Need to do a manual shut off
+  - Workers must go to location, takes time
+  - More work than the company can handle
+- Which shutoffs should be done each month, given capacity constraints?
+- Some of the capacity (worker's time) is used by travel. Schedule accordingly (close together)
+- Some shutoffs shouldn't be done at all - how do you identify those?
+- How should you prioritize shutoffs?
+- Think about data you need, models to use
+  - Different approaches
+  - Use output of one into input of another
+  - Can't tell whether it works, unless tested on real data (don't worry about that)
