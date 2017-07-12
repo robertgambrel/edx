@@ -1,0 +1,53 @@
+\documentclass[]{article}
+\usepackage[letterpaper, top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\hypersetup{hidelinks, pdfauthor={Robert J. Gambrel}, pdftitle={Oct. 2016}}
+
+\setlength{\parskip}{1em}
+
+
+
+
+%opening
+\title{Homework 7}
+\author{Robert Gambrel}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Targeting Unlikely Payers}
+\begin{large}
+First, we'd need to train a model on the likelihood that a customer resumes payment after missing a month. So, using prior customer data, we could model the likelihood that, if a customer misses a payment in a given month, she resumes payment sometime down the line. The 'no' response would be customers who are still active and not paying as well as those that were shut off and never paid. The 'yeses' would be those that eventually resumed payments on their own as well as those that were cut off but then resumed payments. Input factors would include prior payment history (time as a customer, previous incidents of missing a month, total months without payment in the current spell), as well as any demographic or credit information obtained at the time of activation. Customer age, employment status, time in residence, and rental vs. ownership status would all be useful. Since we are trying to classify customers, a SVM, logistic regression, or KNN model would be useful.
+
+Each month, we could take customers who missed their latest payment and use the model to predict whether they fall into the 'never will pay' group. 
+
+\section{Calculating Shutoff Value}
+
+We could keep all those above 50\% likelihood and further use the likelihood to weight how confident we are that this is a good prediction and will not have to be reversed. To estimate the cost of continuing to supply power to non-payers, the customer's power usage could be modeled using an ARIMA or smoothing model with seasonality included. The customer's predicted power usage for the coming months determines the potential lost revenue the company faces.
+
+To determine the value of any given shutoff, I would multiply the likelihood that the customer is a 'never will pay' customer by the customer's expected costs over the coming months. Thus, between two customers who are equally unlikely to never pay, we would want to discontinue the more expensive one first. We could then run an optimization problem - maximize value achieved across all possible cutoffs, subject to the constraint that we do not exceed worker time when cutting off service.
+
+\section{Optimizing Cutoffs Under Time Constraints}
+
+This constraint would have several elements. Each customer i's cutoff time required has several components - drive time from headquarters ($drive\_time_i$) and back again (again $drive\_time_i$), as well as a constant time required to cut service ($cut\_time$). If we assume that the workers disconnect one customer at a time and return to headquarters between each one, then at the maximum, the time it takes to run all the individual trips cannot exceed total worker time ($W$). The If we set $c_i = 1$ for each customer shut off and $c_i = 0$ for those whose service is kept on among $N$ possible customers, this constraint would be:
+
+
+\begin{math}
+\sum_{i}^{N}c_i*(2*drive\_time_i + cut\_time) \leq W
+\end{math}
+
+However, this constraint is binding only in the extremely inefficient case. Some of the drive time can be lessened by disconnecting nearby customers during the same trip. We could cluster customers into $M$ geographic regions (neighborhoods? city blocks?), each with $N_j$ residents, within which we assume the travel time is negligible. A region indicator ($r_j$) would indicate 1 if any customer in that region is flagged for cutoff, thus signifying a trip is necessary. The new constraint would thus be that drive time to each neighborhood ($drive\_time_j$), plus each customer's disconnect time within that neighborhood, plus drive time back, must not exceed worker time.
+
+\begin{math}
+\sum_{j}^{M} r_j * (2 * drive\_time_j + \sum_{i}^{N_j} c_i * cut\_time) \leq W \\
+r_j = \begin{dcases*}
+1 & $\sum_{i}^{N_j}c_i >= 1$ \\
+0 & otherwise
+\end{dcases*}
+\end{math} 
+
+\end{large}
+\end{document}
