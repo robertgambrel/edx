@@ -1,7 +1,14 @@
 # Hypothesis checking
 
+## Shelf Space and Sales
 If a retailer has saved its sales history and shelf space history, then it should be able to run a simple regression analysis instead of doing a complex A/B type test to determine whether shelf space increases sales. It could regress weekly sales for each product on its shelf space, including a time trend and seasonality dummies to de-trend the data. It could also control for location within store (close to front vs. in the back) and price. In order to make comparisons more meaningful, the regressions could be run separately by product type (i.e. one for canned goods, one for fresh produce, one for deli products, etc.) or these could be dummied out and the main regression variables could be interacted with the dummies. 
 
+## Complementarity
 To determine which products are complementary, for each product I would determine which other products are most frequently bought in the same purchase. For example, for all purchases of dog food, how frequently are other items bought. An immediate shortcoming with this approach is that it might treat basic food items, like milk or bread, as complementary to dog food since many trips to the grocery store get this automatically. I would therefore weight the potential complementary product by its inverse purchase frequency. For example, if 80% of dog food purchases also have milk purchase, but milk is purchased on 75% of all visits, then the complementarity is .80/.75 = 1.07. If, however, 30% of dog food purchases are accompanied by carpet cleaner purchases, and carpet cleaner is only bought on 5% of all store visits, then the score would be 6.0. 
 
-We could thus construct an N*N matrix of complementarity weights. 
+It would be inappropriate to feed these weights back into a regression using the same data, as the original data determined the weights. Instead, they can be used to test the impact product placement proximity; by adjusting our model parameters, we can alter whether the optimal solution favors proximity of two complementary products at the expense of their combined total space, for example.
+
+# Optimizing Shelf Space
+Each product's expected relationship between shelf space and sales rates are known from the first regression above. Thus, we have an estimate of 'profit per square foot' for each product, and we want to maximize this over all products. The constraints are that each product has a minimum and maximum set of space it can occupy, and the space used across all products cannot exceed store capacity. 
+
+To test whether complementary products sell better when nearby each other, we might further divide the store info a number of sections. For example, we might imagine that the store has 20 aisles, each with 2 side, so 40 sections. Each section has a capacity of 1/40 of the total store capacity. A product can be assigned to one and only one section. We can then use a multi-armed bandit approach to 
