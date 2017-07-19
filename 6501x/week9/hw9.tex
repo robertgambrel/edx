@@ -1,0 +1,48 @@
+\documentclass[]{article}
+\usepackage[letterpaper, top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\hypersetup{hidelinks, pdfauthor={Robert J. Gambrel}, pdftitle={HW9}}
+
+\setlength{\parskip}{1em}
+
+
+
+
+%opening
+\title{Homework 9}
+\author{Robert Gambrel}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Hypothesis Checking}
+\begin{large}
+	
+\subsection{Shelf Space and Sales}
+
+If a retailer has saved its sales history and shelf space history, then it should be able to run a simple regression analysis instead of doing a complex A/B type test to determine whether shelf space increases sales. It could regress weekly sales for each product on its shelf space, including a time trend and seasonality dummies to de-trend the data. It could also control for location within store (close to front vs. in the back) and price. In order to make comparisons more meaningful, the regressions could be run separately by product type (i.e. one for canned goods, one for fresh produce, one for deli products, etc.) or these could be dummied out and the main regression variables could be interacted with the dummies. 
+
+\subsection{Complementarity}
+
+To determine which products are complementary, for each product I would determine which other products are most frequently bought in the same purchase. For example, for all purchases of dog food, how frequently are other items bought. An immediate shortcoming with this approach is that it might treat basic food items, like milk or bread, as complementary to dog food since many trips to the grocery store get this automatically. I would therefore weight the potential complementary product by its inverse purchase frequency. For example, if 80\% of dog food purchases also have milk purchase, but milk is purchased on 75\% of all visits, then the complementarity is .80/.75 = 1.07. If, however, 30\% of dog food purchases are accompanied by carpet cleaner purchases, and carpet cleaner is only bought on 5\% of all store visits, then the score would be 6.0. 
+
+It would be inappropriate to feed these weights back into a regression using the same data, as the original data determined the weights. Instead, they can be used to test the impact product placement proximity; by adjusting our model parameters, we can alter whether the optimal solution favors proximity of two complementary products at the expense of their combined total space, for example.
+
+\section{Optimizing Shelf Space}
+
+Each product's expected relationship between shelf space and sales rates are known from the first regression above. Thus, we have an estimate of 'profit per square foot' for each product, and we want to maximize this over all products. The constraints are that each product has a minimum and maximum set of space it can occupy, and the space used across all products cannot exceed store capacity. 
+
+To test whether complementary products sell better when nearby each other, we might further divide the store info a number of sections. For example, we might imagine that the store has 20 aisles, each with 2 sides, so 40 sections. Each section has a capacity of 1/40 of the total store capacity. A product can be assigned to one and only one section. We can then use a multi-armed bandit approach to re-optimize our model each week. Every week, we could randomly determine whether to pair products based on their relative complementarity: the pair's complementarity divided by the maximum complementarity that exists between any products ($complementarity_{ij} / max(complementarity_{IJ}$). Whether they are paired would be a Bernoulli draw of the resulting score between 0 and 1. These pairwise requirements could then be added to the optimization problem; if the pair is selected in this round, then $section_i$ must equal $section_j$ for the two products.
+
+\section{Ongoing Analysis}
+
+Complementarity should be re-calculated on a weekly basis. If complementary products are randomly assigned to be near each other after the first week's optimization, then the effect should be evinced in that week's performance. If, however, the hypothesis of complementary sales is incorrect, then most complementarity scores should converge to the median value, indicating that one purchase does not correlate with another. 
+
+The optimal result computed each week will illustrate the hypothesis. If, over time, certain products are consistently clumped together on the shelf, then the model has determined that sales are optimized by keeping them together. If, however, products are randomly distributed, then the model shows that sales are optimized by focusing on shelf space instead of proximity to others.
+
+
+\end{large}
+\end{document}
