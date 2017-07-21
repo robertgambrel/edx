@@ -1,1 +1,11 @@
-
+# Monetization
+- How to combine data to generate value?
+- Dataset 1: Alumni magazine data
+  - Financial net work
+  - Personal Interests
+- Dataset 2: Nonprofit data
+  - Charitable donations
+- Dataset 3: Credit bureau data
+  - Default history
+- By finding same person (high money and interest in historical societies) could be targeted by tour companies
+- How to use only internal data, and how to combine with other datasets
