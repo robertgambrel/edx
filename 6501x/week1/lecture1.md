@@ -1,56 +1,56 @@
 Module 1: Intro
-	• 1: Intro to analytics modeling
-		○ 2 streams:
-			§ Models (machline learning, regression, etc.)
-			§ Cross-cutting: data quality, output quality, imputing data, etc.
-		○ 'Model' can be 3 things:
-			§ 'Regression' can be a model
-			§ Specific functional form can be a model
-			§ Specific coefficient estimates can be a model
-	• 2: Classification
-		○ Want classification lines to minimize mistakes - have greatest difference from borderline cases
-		○ When pure separation is impossible, minimize incorrectly classified points
-		○ Minimize errors: risk of misclassification vs actual misclasifications
-			§ The more costly one type of bad decision is, the less possible you want it to be
-				□ IE make it less likely you approve a loan, approve a drug, etc.
-		○ Types of data
-			§ Structured (tables)
-				□ Every row is an observation/data point, every column is a variable (feature & response)
-				□ Quantitative
-				□ Categorical
-					® Multiple, or binary
-				□ Data points might be unrelated (independent), could also be time series
-			§ Unstructured data
-				□ Written text
-		○ SVM:
-			§ Tradeoff b/w minimizing errors and maximizing margin
-			§ Must scale the data before running calculations, to make changes comparable
-			§ Classifier can be non-linear as well
-		○ Scaling
-			§ Scale down to same interval: between 0 and 1
-				□ (X - x_min) / (x_max - x_min)
-		○ Standardization
-			§ Could also scale to normal distribution (subtract mean, divide by sigma)
-		○ Choice depends on model - some require finite bounds, some require normal distributions
-			§ If the data itself is bounded, then scale to 0-1
-			§ Sometimes try both
-			§ But always need to scale down in some way! Can't just use raw data
-		○ KNN
-			§ Classify new obs as the most common values among K nearest neighbots
-			§ Can use straight-line distance or other measures of distance
-			§ Can weight attributes differently when determining distance
-				□ Could weight some unimportant attributes as 0
-			§ Need a good value of K - must try multiple and see how well it works
-	• 3: Validation
-		○ Don't validate on the training set - you already fit it the best you can
-		○ Real effects: real relationships b/w attributes and response
-		○ Random effects: random fluctuations
-		○ Impossible to see the difference between the two, only show up when using the model on new data (shows what was real vs. random)
-			§ There will always be some sort of random pattern you could try to find meaning out of, but it won't show up in new data and therefore messes up your model
-		○ In general, want to pick the model that performs best on the validation set
-			§ However, when you run a bunch and pick the best performing one, it's likely that that one had some randomness that helped it perform slightly better than would otherwise be expected
-				□ So would expect future performance to regress to the mean later
-		○ Use training dataset to build the model
-			§ Use validation dataset to choose which model performs best
-			§ Use test set to measure model's out-of-sample quality
-			
+- 1: Intro to analytics modeling
+	- 2 streams:
+		- Models (machline learning, regression, etc.)
+		- Cross-cutting: data quality, output quality, imputing data, etc.
+	- 'Model' can be 3 things:
+		- 'Regression' can be a model
+		- Specific functional form can be a model
+		- Specific coefficient estimates can be a model
+- 2: Classification
+	- Want classification lines to minimize mistakes - have greatest difference from borderline cases
+	- When pure separation is impossible, minimize incorrectly classified points
+	- Minimize errors: risk of misclassification vs actual misclasifications
+		- The more costly one type of bad decision is, the less possible you want it to be
+			- IE make it less likely you approve a loan, approve a drug, etc.
+	- Types of data
+		- Structured (tables)
+			- Every row is an observation/data point, every column is a variable (feature & response)
+			- Quantitative
+			- Categorical
+				- Multiple, or binary
+			- Data points might be unrelated (independent), could also be time series
+		- Unstructured data
+			- Written text
+	- SVM:
+		- Tradeoff b/w minimizing errors and maximizing margin
+		- Must scale the data before running calculations, to make changes comparable
+		- Classifier can be non-linear as well
+	- Scaling
+		- Scale down to same interval: between 0 and 1
+			- (X - x_min) / (x_max - x_min)
+	- Standardization
+		- Could also scale to normal distribution (subtract mean, divide by sigma)
+	- Choice depends on model - some require finite bounds, some require normal distributions
+		- If the data itself is bounded, then scale to 0-1
+		- Sometimes try both
+		- But always need to scale down in some way! Can't just use raw data
+	- KNN
+		- Classify new obs as the most common values among K nearest neighbots
+		- Can use straight-line distance or other measures of distance
+		- Can weight attributes differently when determining distance
+			- Could weight some unimportant attributes as 0
+		- Need a good value of K - must try multiple and see how well it works
+- 3: Validation
+	- Don't validate on the training set - you already fit it the best you can
+	- Real effects: real relationships b/w attributes and response
+	- Random effects: random fluctuations
+	- Impossible to see the difference between the two, only show up when using the model on new data (shows what was real vs. random)
+		- There will always be some sort of random pattern you could try to find meaning out of, but it won't show up in new data and therefore messes up your model
+	- In general, want to pick the model that performs best on the validation set
+		- However, when you run a bunch and pick the best performing one, it's likely that that one had some randomness that helped it perform slightly better than would otherwise be expected
+			- So would expect future performance to regress to the mean later
+	- Use training dataset to build the model
+		- Use validation dataset to choose which model performs best
+		- Use test set to measure model's out-of-sample quality
+		
