@@ -14,4 +14,26 @@
   - Usually fix the size of the significand and exponent digits
 - Rounding errors
   - Have to store numbers in a finite format, requires rounding at some point
+- Single-precision
+  - 'float' type in C, Java, etc. 32 bits total
+    - 1 sign bit
+    - 24 bit significand
+    - 8 bit exponent
+  - Smallest possible positive value:
+    - 2 ^ -126
+  - Smalles possible positive value > 1
+    - 1.00000001 ^ 1
+    - the rounding error here is epsilon
+      - 'machine epsilon' - depends on # of bits in the significand
+      - here, 2^-23
+- Double-precision
+  - 'double' in primitive languages
+  - default type in Python
+  - 64 bits
+    - 1 sign bit
+    - 53 bit signficand
+    - 11 bit exponent
+  - Much more precise, but still has roundoff error
+- Error analysis
   - 
+  
