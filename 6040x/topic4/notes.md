@@ -1,1 +1,17 @@
-
+# Representing Numbers
+- Numbers are represented by a string of digits, which represent a mathematical value
+- Each numeric place: is the base to the ith power
+- Computers use binary
+  - bit: BInary digiT
+- Fractional values
+  - 0.1 base 10 is an infinite decimal in base 2
+  - Many seemingly finite decimals are infinite in binary, so note that memory limitations lead to approximations
+- Floating points
+  - Fixed digits in the string
+  - Decimal point can go anywhere among the digits (it floats)
+  - Any real number can be written in scientific notation, then recorded as a tuple:
+    - (sign, significand, exponent)
+  - Usually fix the size of the significand and exponent digits
+- Rounding errors
+  - Have to store numbers in a finite format, requires rounding at some point
+  - 
