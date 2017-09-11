@@ -35,5 +35,19 @@
     - 11 bit exponent
   - Much more precise, but still has roundoff error
 - Error analysis
-  - 
+  - f(x) is the exact function to compute
+  - alg(x) approximates f(x)
+  - what is difference b/w outputs of them?
+    - want to minimize the difference - the 'forward error'
+    - if it's 'small enough', is 'forward stable'
+  - alg(x) = f(x + \delta * x)
+    - 'backwards stability' analysis
+    - \delta * x is the backward error
+    - Want to show that the backward error is small
+      - Show that it's 'backward stable'
+  - Backward error is a bit more appropriate for computer programs - want similar noisy inputs to yield similar outputs
+  - If you show the backward error is small, then that implies the forward error is also small (Taylor theorem)
+  - float(a+b) = (a + b)(1+\delta)
+    - \delta is the relative error, rarely know its value
+    - But do know its worst case scenario, \epsilon
   
