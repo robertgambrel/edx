@@ -14,18 +14,18 @@
   - Usually fix the size of the significand and exponent digits
 - Rounding errors
   - Have to store numbers in a finite format, requires rounding at some point
-- Single-precision
+- Single-precision (IEEE 754)
   - 'float' type in C, Java, etc. 32 bits total
     - 1 sign bit
-    - 24 bit significand
-    - 8 bit exponent
+    - 24 bit significand (assume leading 1, other 23 are actually used)
+    - 8 bit exponent [-126,127]
   - Smallest possible positive value:
     - 2 ^ -126
   - Smalles possible positive value > 1
     - 1.00000001 ^ 1
     - the rounding error here is epsilon
       - 'machine epsilon' - depends on # of bits in the significand
-      - here, 2^-23
+      - here, 2^-23, have 21 0's followed by 1 in the significand.
 - Double-precision
   - 'double' in primitive languages
   - default type in Python
@@ -43,11 +43,28 @@
   - alg(x) = f(x + \delta * x)
     - 'backwards stability' analysis
     - \delta * x is the backward error
-    - Want to show that the backward error is small
+    - Want to show that the backward error is small - requires sufficiently small \delta to remain true
       - Show that it's 'backward stable'
-  - Backward error is a bit more appropriate for computer programs - want similar noisy inputs to yield similar outputs
+  - Backward error is a bit more appropriate for data analysis - want similar noisy inputs to yield similar outputs
   - If you show the backward error is small, then that implies the forward error is also small (Taylor theorem)
   - float(a+b) = (a + b)(1+\delta)
     - \delta is the relative error, rarely know its value
+    - Depends on what operation is being done - addition, multiplication, division
     - But do know its worst case scenario, \epsilon
+- Computing a sum
+  - f(x) = sum(x)
+  - initial = 0.0
+    - for each x, initial += x
+    - know that this is mathematically correct
+  - computed kth value:
+    - exact sum + sum of first order errors + a bunch of higher order errors
+    - since higher order are 10^-16 raised to a power, usually drop them and approximate
+    - so computed sum = actual sum + each term multipled by delta
+- Checking whether sum is forward/backward stable
+  - Backward stable
+    - Forward sum is computed sum with each term perturbed by delta
+    - that's the form of backwards stable
+    - so what delta is small enough?
+      - capital delta must be smaller than (n-i) * \epsilon
+    - algorithm is backwards stable when n*\epsilon << 1 (much less than)
   
